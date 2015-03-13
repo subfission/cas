@@ -5,8 +5,6 @@ use App;
 
 class CasServiceProvider extends ServiceProvider {
 
-
-	protected $session;
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
