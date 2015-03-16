@@ -22,7 +22,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Subfission\\Cas\\": "src"
+      "Subfission\\Cas\\": "src/Subfission/Cas/"
     }
   }
 }
