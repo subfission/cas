@@ -5,8 +5,6 @@ use App;
 
 class CasServiceProvider extends ServiceProvider {
 
-
-	protected $session;
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -21,6 +19,9 @@ class CasServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		$this->publishes([
+			__DIR__.'/../../config/config.php' => config_path('cas.php'),
+		]);
 	}
 	/**
 	 * Register the service provider.
