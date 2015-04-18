@@ -37,7 +37,7 @@ As well as the Facade to your app.php config file :
 
 You need to publish the configuration file :
 
-    $ php artisan config:publish subfission/cas
+    $ php artisan vendor:publish subfission/cas
 
 Configuration
 ==
