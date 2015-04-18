@@ -17,10 +17,9 @@ was built for my neccessity but can be easily used for anyone requiring CAS in L
 
 ## Installation
 
-Require this package in your composer.json and run composer update (or run `composer require subfission/cas:dev-master` 
-directly):
+Require this package using composer in your Laravel 5 directory :
 
-    "subfission/cas": "dev-master"
+    $ composer require "subfission/cas": "dev-master"
 
 After updating composer, add the ServiceProvider to the providers array in app/config/app.php
 
@@ -37,7 +36,7 @@ As well as the Facade to your app.php config file :
 
 You need to publish the configuration file :
 
-    $ php artisan config:publish subfission/cas
+    $ php artisan vendor:publish
 
 Configuration
 ==
