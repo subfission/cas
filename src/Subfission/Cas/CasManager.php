@@ -1,39 +1,29 @@
 <?php namespace Subfission\Cas;
 
-use Config;
-use Illuminate\Auth\AuthManager;
-use Illuminate\Session\SessionManager;
-use Illuminate\Support\Manager;
+use Illuminate\Contracts\Auth\Guard;
 
 class CasManager {
 
     var $config;
     /**
-     * The active connection instances.
+     * The active connection instance.
      *
-     * @var array
+     * @var string
      */
-    protected $connections = array();
+    protected $connections;
     /**
-     * @var \Illuminate\Auth\AuthManager
+     * @var \Illuminate\Contracts\Auth\Guard
      */
     private $auth;
-    /**
-     * @var \Illuminate\Session\SessionManager
-     */
-    private $session;
 
     /**
      * @param array $config
-     * @param AuthManager $auth
-     * @param SessionManager $session
+     * @param Guard $auth
      */
-
-    public function __construct(AuthManager $auth, SessionManager $session)
+    public function __construct(Guard $auth)
     {
-        $this->config = Config::get('cas');
+        $this->config = config('cas');
         $this->auth = $auth;
-        $this->session = $session;
     }
 
     /**
@@ -42,38 +32,24 @@ class CasManager {
      * @param string $name
      * @return app\Cas\Directory
      */
-    public function connection($name = null)
+    public function connection()
     {
-        if ( ! isset($this->connections[ $name ]) )
+        if ( ! isset($this->connections) )
         {
-            $this->connections[ $name ] = $this->createConnection($name);
+            $this->connections = $this->createConnection();
         }
 
-        return $this->connections[ $name ];
+        return $this->connections;
     }
 
     /**
      * Create the given connection by name.
      *
-     * @param string $name
      * @return app\Cas\Sso
      */
-    protected function createConnection($name)
+    protected function createConnection()
     {
-        $connection = new Sso($this->config, $this->auth, $this->session);
-
-        return $connection;
-    }
-
-
-    /**
-     * Get the default connection name.
-     *
-     * @return string
-     */
-    protected function getDefaultConnection()
-    {
-        return 'default';
+        return new Sso($this->config, $this->auth);
     }
 
     /**

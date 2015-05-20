@@ -1,7 +1,6 @@
 <?php namespace Subfission\Cas;
 
 use Illuminate\Support\ServiceProvider;
-use App;
 
 class CasServiceProvider extends ServiceProvider {
 
@@ -32,7 +31,7 @@ class CasServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('cas', function()
 		{
-			return new CasManager(app('auth'), app('session'));
+			return new CasManager(app('auth'));
 		});
 	}
 	/**

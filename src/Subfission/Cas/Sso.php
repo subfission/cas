@@ -51,10 +51,10 @@ class Sso {
      */
     public function authenticate()
     {
-// attempt to authenticate with CAS server
+        // attempt to authenticate with CAS server
         if ( phpCAS::forceAuthentication() )
         {
-// retrieve authenticated credentials
+            // retrieve authenticated credentials
             $this->setRemoteUser();
 
             return true;
@@ -117,19 +117,18 @@ class Sso {
     private function cas_init()
     {
         session_name( (isset($this->config['session_name']) ? $this->config['session_name'] : 'CASAuth' ));
-
         // initialize CAS client
         $this->configureCasClient();
         $this->configureSslValidation();
         $this->detect_authentication();
 
-// set service URL for authorization with CAS server
-//\phpCAS::setFixedServiceURL();
+        // set service URL for authorization with CAS server
+        //\phpCAS::setFixedServiceURL();
         if ( ! empty($this->config[ 'cas_service' ]) )
         {
             phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
         }
-// set login and logout URLs of the CAS server
+        // set login and logout URLs of the CAS server
         phpCAS::setServerLoginURL($this->config[ 'cas_login_url' ]);
         phpCAS::setServerLogoutURL($this->config[ 'cas_logout_url' ]);
     }
@@ -146,7 +145,7 @@ class Sso {
 
     private function configureSslValidation()
     {
-// set SSL validation for the CAS server
+        // set SSL validation for the CAS server
         if ( $this->config[ 'cas_validation' ] == 'self' )
         {
             phpCAS::setCasServerCert($this->config[ 'cas_cert' ]);
@@ -170,10 +169,6 @@ class Sso {
 
     private function detect_authentication()
     {
-        $this->isAuthenticated = phpCAS::isAuthenticated();
-        if ( $this->isAuthenticated )
-        {
-            $this->setRemoteUser();
-        }
+        if ( ($this->isAuthenticated = phpCAS::isAuthenticated()) ) $this->setRemoteUser();
     }
 }
