@@ -1,10 +1,7 @@
 <?php namespace Subfission\Cas\Middleware;
 
-use App;
-use Config;
 use Closure;
-use Illuminate\Auth\AuthManager;
-use Illuminate\Session\SessionManager;
+use Illuminate\Contracts\Auth\Guard;
 
 class CASAuth {
 
@@ -12,11 +9,11 @@ class CASAuth {
 	protected $auth;
 	protected $session;
 
-	public function __construct(AuthManager $auth, SessionManager $session)
+	public function __construct(Guard $auth)
 	{
-		$this->config = Config::get('cas');
-		$this->auth = App::make('auth');
-		$this->session = App::make('session');
+        $this->auth = $auth;
+		$this->config = config('cas');
+		$this->session = app('session');
 	}
 
 	/**
@@ -36,7 +33,7 @@ class CASAuth {
 			}
 			else
 			{
-				$cas = (App::make('cas'));
+				$cas = app('cas');
 				$cas->authenticate();
 			}
 		}
