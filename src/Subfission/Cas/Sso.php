@@ -1,7 +1,7 @@
 <?php namespace Subfission\Cas;
 
-use Illuminate\Auth\AuthManager;
-use Illuminate\Session\SessionManager;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Session;
 use phpCAS;
 
 /**
@@ -27,23 +27,17 @@ class Sso {
      * @var \Illuminate\Auth\AuthManager
      */
     private $auth;
-    /**
-     * @var \Illuminate\Session\SessionManager
-     */
-    private $session;
+
     private $isAuthenticated;
 
     /**
      * @param $config
      * @param Auth $auth
-     * @param Session $session
      */
-    public function __construct($config, AuthManager $auth, SessionManager $session)
+    public function __construct($config, Guard $auth)
     {
         $this->config = $config;
         $this->auth = $auth;
-        $this->session = $session;
-
         $this->cas_init();
     }
 
@@ -107,7 +101,7 @@ class Sso {
             {
                 $this->auth->logout();
             }
-            $this->session->flush();
+            Session::flush();
             phpCAS::logout();
             exit;
         }
@@ -138,7 +132,6 @@ class Sso {
 // set login and logout URLs of the CAS server
         phpCAS::setServerLoginURL($this->config[ 'cas_login_url' ]);
         phpCAS::setServerLogoutURL($this->config[ 'cas_logout_url' ]);
-
     }
 
     /**
@@ -172,6 +165,7 @@ class Sso {
     private function setRemoteUser()
     {
         $this->remoteUser = phpCAS::getUser();
+        Session::put('cas_user', $this->remoteUser);
     }
 
     private function detect_authentication()
@@ -182,5 +176,4 @@ class Sso {
             $this->setRemoteUser();
         }
     }
-
 }

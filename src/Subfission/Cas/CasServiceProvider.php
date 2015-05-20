@@ -32,7 +32,7 @@ class CasServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('cas', function()
 		{
-			return new CasManager(App::make('auth'), App::make('session'));
+			return new CasManager(app('auth'), app('session'));
 		});
 	}
 	/**
