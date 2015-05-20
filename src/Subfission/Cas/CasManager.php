@@ -1,6 +1,6 @@
 <?php namespace Subfission\Cas;
 
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Auth\AuthManager;
 
 class CasManager {
 
@@ -12,18 +12,17 @@ class CasManager {
      */
     protected $connections;
     /**
-     * @var \Illuminate\Contracts\Auth\Guard
+     * @var \Illuminate\Auth\AuthManager
      */
     private $auth;
 
     /**
      * @param array $config
-     * @param Guard $auth
      */
-    public function __construct(Guard $auth)
+    public function __construct()
     {
         $this->config = config('cas');
-        $this->auth = $auth;
+        $this->auth = app('auth');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php namespace Subfission\Cas;
 
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Session;
 use phpCAS;
 
@@ -34,7 +34,7 @@ class Sso {
      * @param $config
      * @param Auth $auth
      */
-    public function __construct($config, Guard $auth)
+    public function __construct($config, AuthManager $auth)
     {
         $this->config = $config;
         $this->auth = $auth;
