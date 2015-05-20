@@ -31,7 +31,7 @@ class CasServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('cas', function()
 		{
-			return new CasManager(app('auth'));
+			return new CasManager();
 		});
 	}
 	/**
