@@ -1,7 +1,7 @@
 <?php namespace Subfission\Cas\Middleware;
 
 use Closure;
-use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\Auth\Guard;
 
 class CASAuth {
 
@@ -9,7 +9,7 @@ class CASAuth {
 	protected $auth;
 	protected $session;
 
-	public function __construct(Auth $auth)
+	public function __construct(Guard $auth)
 	{
         $this->auth = $auth;
 		$this->config = config('cas');

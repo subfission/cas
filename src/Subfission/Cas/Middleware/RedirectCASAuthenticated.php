@@ -2,8 +2,6 @@
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use App;
-use Config;
 
 class RedirectCASAuthenticated {
 
@@ -13,7 +11,7 @@ class RedirectCASAuthenticated {
 	public function __construct(Guard $auth)
 	{
 		$this->auth = $auth;
-		$this->cas = (App::make('cas'));
+		$this->cas = app('cas');
 	}
 
 	/**
@@ -27,11 +25,10 @@ class RedirectCASAuthenticated {
 	{
 		if($this->cas->isAuthenticated())
 		{
-            $redirect_path = Config::get('redirect_path');
+            $redirect_path = config('redirect_path');
 			return redirect( $redirect_path ? $redirect_path : 'home');
 		}
 
 		return $next($request);
 	}
-
 }
