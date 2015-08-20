@@ -9,7 +9,8 @@ use phpCAS;
  *
  * @package Cas
  */
-class Sso {
+class Sso
+{
 
     /**
      * Cas Config
@@ -52,13 +53,14 @@ class Sso {
     public function authenticate()
     {
         // attempt to authenticate with CAS server
-        if ( phpCAS::forceAuthentication() )
-        {
+        if (phpCAS::forceAuthentication()) {
             // retrieve authenticated credentials
             $this->setRemoteUser();
 
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -95,10 +97,8 @@ class Sso {
 
     public function logout()
     {
-        if ( phpCAS::isSessionAuthenticated() )
-        {
-            if ( $this->auth->check() )
-            {
+        if (phpCAS::isSessionAuthenticated()) {
+            if ($this->auth->check()) {
                 $this->auth->logout();
             }
             Session::flush();
@@ -116,7 +116,7 @@ class Sso {
      */
     private function cas_init()
     {
-        session_name( (isset($this->config['session_name']) ? $this->config['session_name'] : 'CASAuth' ));
+        session_name((isset($this->config[ 'session_name' ]) ? $this->config[ 'session_name' ] : 'CASAuth'));
         // initialize CAS client
         $this->configureCasClient();
         $this->configureSslValidation();
@@ -124,8 +124,7 @@ class Sso {
 
         // set service URL for authorization with CAS server
         //\phpCAS::setFixedServiceURL();
-        if ( ! empty($this->config[ 'cas_service' ]) )
-        {
+        if ( ! empty($this->config[ 'cas_service' ])) {
             phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
         }
         // set login and logout URLs of the CAS server
@@ -140,21 +139,21 @@ class Sso {
      */
     private function configureCasClient()
     {
-        phpCAS::client(CAS_VERSION_2_0, $this->config[ 'cas_hostname' ], $this->config[ 'cas_port' ], $this->config[ 'cas_uri' ], false);
+        phpCAS::client(CAS_VERSION_2_0, $this->config[ 'cas_hostname' ], $this->config[ 'cas_port' ],
+            $this->config[ 'cas_uri' ], false);
     }
 
     private function configureSslValidation()
     {
         // set SSL validation for the CAS server
-        if ( $this->config[ 'cas_validation' ] == 'self' )
-        {
+        if ($this->config[ 'cas_validation' ] == 'self') {
             phpCAS::setCasServerCert($this->config[ 'cas_cert' ]);
-        } else if ( $this->config[ 'cas_validation' ] == 'ca' )
-        {
-            phpCAS::setCasServerCACert($this->config[ 'cas_cert' ]);
-        } else
-        {
-            phpCAS::setNoCasServerValidation();
+        } else {
+            if ($this->config[ 'cas_validation' ] == 'ca') {
+                phpCAS::setCasServerCACert($this->config[ 'cas_cert' ]);
+            } else {
+                phpCAS::setNoCasServerValidation();
+            }
         }
     }
 
@@ -169,6 +168,19 @@ class Sso {
 
     private function detect_authentication()
     {
-        if ( ($this->isAuthenticated = phpCAS::isAuthenticated()) ) $this->setRemoteUser();
+        if (($this->isAuthenticated = phpCAS::isAuthenticated())) {
+            $this->setRemoteUser();
+        }
+    }
+
+    /**
+     * Get the attributes for for the currently connected user. This method
+     * can only be called after authenticate() or an error wil be thrown.
+     * @return mixed
+     */
+    public function getAttributes()
+    {
+        // We don't error check because phpCAS has it's own error handling
+        return phpCAS::getAttributes();
     }
 }

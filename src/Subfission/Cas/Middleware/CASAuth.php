@@ -31,11 +31,8 @@ class CASAuth {
 			{
 				return response('Unauthorized.', 401);
 			}
-			else
-			{
-				$cas = app('cas');
-				$cas->authenticate();
-			}
+			$cas = app('cas');
+			$cas->authenticate();
 		}
 
 		return $next($request);
