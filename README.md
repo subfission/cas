@@ -1,6 +1,9 @@
 # CAS
 Simple CAS Authentication for Laravel 5+
 
+This branch is dedicated for PHP7 development as the project will be moving toward that direction.  This version
+uses the latest phpCAS and supports verbose logging.
+
 This version is a highly modified version of "xavrsl/cas" with specific priority on simplicity and functionality with 
 Laravel 5+.  While this will likely still work with older versions, they are untested. This package was built for my 
 necessity but can be easily used for anyone requiring CAS in Laravel 5.  This package is different in mindset as the 
