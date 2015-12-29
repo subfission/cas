@@ -119,7 +119,7 @@ class CasManager
         return $this->user();
     }
 
-    public function logout($params)
+    public function logout($params = "")
     {
         if (phpCAS::isSessionAuthenticated()) {
             phpCAS::logout($params);
