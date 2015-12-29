@@ -13,7 +13,12 @@ class CasManager
     public function __construct(array $config)
     {
         $this->parseConfig($config);
-        phpCAS::setDebug($this->config[ 'cas_debug' ]);
+        if ($this->config[ 'cas_debug' ] === true) {
+            phpCAS::setDebug();
+        } else {
+            phpCAS::setDebug($this->config[ 'cas_debug' ]);
+        }
+
         phpCAS::setVerbose($this->config[ 'cas_verbose_errors' ]);
 
         session_name($this->config[ 'cas_session_name' ]);
@@ -33,7 +38,7 @@ class CasManager
      */
     protected function configureCas($method = 'client')
     {
-        $server_version = $this->config[ 'cas_enable_saml' ] ? 'CAS_VERSION_2_0' : 'SAML_VERSION_1_1';
+        $server_version = $this->config[ 'cas_enable_saml' ] ? SAML_VERSION_1_1 : CAS_VERSION_2_0;
         phpCAS::$method($server_version, $this->config[ 'cas_hostname' ], (int)$this->config[ 'cas_port' ],
             $this->config[ 'cas_uri' ], $this->config[ 'cas_control_session' ]);
 

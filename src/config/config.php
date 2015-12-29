@@ -134,12 +134,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Enable Verbose error messages. Not recommended for production.
+    | true | false
+    |--------------------------------------------------------------------------
+    */
+    'cas_verbose_errors'  => env('CAS_VERBOSE_ERRORS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | This will cause CAS to skip authentication and assume this user id.
     | This should only be used for developmental purposes.  getAttributes()
     | will return null in this condition.
      */
     'cas_masquerade'      => env('CAS_MASQUERADE', '')
-
-
-
 ];
