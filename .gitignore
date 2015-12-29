@@ -1,4 +1,8 @@
 /bootstrap/compiled.php
 .env.*.php
 .env.php
+/tests/CASAuthTest.php
+/build
 .idea
+/composer.lock
+/vendor

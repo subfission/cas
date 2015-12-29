@@ -31,8 +31,11 @@ class CASAuth {
 			{
 				return response('Unauthorized.', 401);
 			}
+			// We setup CAS here to reduce the amount of objects we need to build at runtime.  This
+			// way, we only create the CAS calls if the user has not yet authenticated.
 			$cas = app('cas');
 			$cas->authenticate();
+			session()->put('cas_user', $cas->User());
 		}
 
 		return $next($request);

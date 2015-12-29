@@ -1,19 +1,22 @@
 # CAS
-Simple CAS Authentication for Laravel 5
+Simple CAS Authentication for Laravel 5+
 
 This version is a highly modified version of "xavrsl/cas" with specific priority on simplicity and functionality with 
-Laravel 5.  If you are familiar with "xavrsl/cas", then you will find this version very easy to utilize. This package
-was built for my neccessity but can be easily used for anyone requiring CAS in Laravel 5.
+Laravel 5+.  While this will likely still work with older versions, they are untested. This package was built for my 
+necessity but can be easily used for anyone requiring CAS in Laravel 5.  This package is different in mindset as the 
+goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
 ## Updates
-### Added
-- Custom SSO Cookie Names
-- Middleware for Authentication
-- Middleware for redirecting Authenticated Users
 
-### Removed
-- CAS SSO Proxy Services
-- Multiple CAS connections
+* Session handling has been removed from CAS Manager and is moved strictly into the middleware
+* You can now leverage the CAS sessions instead of relying on Laravel sessions
+* More security fixes
+* Cleaner codebase
+* Backwards compatible (for the most part)
+* More configuration options in the config file available
+* Masquerading as a user now supported
+* Tested with PHP7
+
 
 ## Installation
 
@@ -42,7 +45,7 @@ Configuration
 ==
 Edit the cas.php configuration file after you publish it, with your server's settings.  
 
-Configuration should be pretty straightforward for anyone who's ever used the PHPCas client.
+Read the comments in the config file for further help.
 
 Usage
 ==
@@ -66,6 +69,13 @@ Route::get('/auth/logout', function()
 });
 ```
 
-Then get the current user id this way :
+Then get the current user id in one of these ways :
 
 	Cas::getCurrentUser();
+	Cas::user()
+
+Once a user has CAS authenticated, you can also retrieve the user from the session to be used for authorization or
+secondary authentication like this :
+```php
+    $user = session('cas_user')
+```
