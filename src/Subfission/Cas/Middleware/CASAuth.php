@@ -5,15 +5,13 @@ use Illuminate\Contracts\Auth\Guard;
 
 class CASAuth {
 
-	protected $config;
 	protected $auth;
-	protected $session;
+	protected $cas;
 
 	public function __construct(Guard $auth)
 	{
         $this->auth = $auth;
-		$this->config = config('cas');
-		$this->session = app('session');
+		$this->cas = app('cas');
 	}
 
 	/**
@@ -25,14 +23,16 @@ class CASAuth {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->auth->guest())
+		if ($this->auth->guest() || ! $this->cas->isAuthenticated())
 		{
 			if ($request->ajax())
 			{
 				return response('Unauthorized.', 401);
 			}
-			$cas = app('cas');
-			$cas->authenticate();
+			// We setup CAS here to reduce the amount of objects we need to build at runtime.  This
+			// way, we only create the CAS calls only if the user has not yet authenticated.
+			$this->cas->authenticate();
+			session()->put('cas_user', $this->cas->User());
 		}
 
 		return $next($request);
