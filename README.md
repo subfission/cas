@@ -25,7 +25,7 @@ goal in this project is to be as minimal as possible while offering as much flex
 
 Require this package using composer in your Laravel 5 directory :
 
-    $ composer require "subfission/cas": "dev-cas-php7"
+    $ composer require "subfission/cas":"dev-cas-php7"
 
 After updating composer, add the ServiceProvider to the providers array in app/config/app.php
 
