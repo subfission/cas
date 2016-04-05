@@ -24,7 +24,7 @@ class CASAuth
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->guest() || ! session()->has('cas_user')) {
+        if ( ! session('cas_user') ) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             }
