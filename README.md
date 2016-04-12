@@ -1,8 +1,5 @@
 # CAS
-Simple CAS Authentication for Laravel 5+
-
-This branch is dedicated for PHP7 development as the project will be moving toward that direction.  This version
-uses the latest phpCAS and supports verbose logging.
+Simple CAS Authentication for Laravel 5.x
 
 This version is a highly modified version of "xavrsl/cas" with specific priority on simplicity and functionality with 
 Laravel 5+.  While this will likely still work with older versions, they are untested. This package was built for my 
@@ -10,7 +7,9 @@ necessity but can be easily used for anyone requiring CAS in Laravel 5.  This pa
 goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
 ## Updates
-
+* Updated to work with Laravel 5.2 (backwards compatible)
+* Uses the latest phpCAS
+* Supports verbose logging
 * Session handling has been removed from CAS Manager and is moved strictly into the middleware
 * You can now leverage the CAS sessions instead of relying on Laravel sessions
 * More security fixes
@@ -18,14 +17,13 @@ goal in this project is to be as minimal as possible while offering as much flex
 * Backwards compatible (for the most part)
 * More configuration options in the config file available
 * Masquerading as a user now supported
-* Tested with PHP7
-
+* Tested and working with PHP 7.x
 
 ## Installation
 
 Require this package using composer in your Laravel 5 directory :
 
-    $ composer require "subfission/cas":"dev-cas-php7"
+    $ composer require "subfission/cas":"dev-master"
 
 After updating composer, add the ServiceProvider to the providers array in app/config/app.php
 
@@ -35,6 +33,7 @@ Add the middelware to your Kernel.php file :
 
 	'cas.auth'  => 'Subfission\Cas\Middleware\CASAuth',
 	'cas.guest' => 'Subfission\Cas\Middleware\RedirectCASAuthenticated',
+*I provided this sample middleware for your usage.  If you need a more custom solution, create your middleware and modify these paths accordingly.*
 
 As well as the Facade to your app.php config file :
 
@@ -55,9 +54,10 @@ Usage
 
 Authenticate against the CAS server
 
-	Cas::authenticate();
+	Cas::authenticate()
+	cas()->authenticate()
 
-Exemple of CAS authentication in a route middleware :
+Example of CAS authentication in a route middleware :
 
 ```php
 Route::group(['middleware' => ['cas.auth']], function ()
@@ -74,11 +74,18 @@ Route::get('/auth/logout', function()
 
 Then get the current user id in one of these ways :
 
-	Cas::getCurrentUser();
+	Cas::getCurrentUser()
+	cas()->getCurrentUser()
+	
 	Cas::user()
+	cas()->user()
 
 Once a user has CAS authenticated, you can also retrieve the user from the session to be used for authorization or
 secondary authentication like this :
 ```php
-    $user = session('cas_user')
+    if ( session()->has('cas_user') ) {
+        $user = session('cas_user');
+    } else {
+        cas()->authenticate();
+    }
 ```

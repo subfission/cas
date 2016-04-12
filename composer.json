@@ -26,11 +26,15 @@
   "autoload": {
     "psr-4": {
       "Subfission\\Cas\\": "src/Subfission/Cas/"
-    }
+    },
+    "files": [
+      "src/Subfission/Cas/functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
       "Subfission\\Cas\\Tests\\": "tests"
     }
-  }
+  },
+  "minimum-stability": "stable"
 }
