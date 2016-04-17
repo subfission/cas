@@ -32,7 +32,7 @@ class CasServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cas', function () {
-            return $this->app->make( 'Subfission\Cas\CasManager', config('cas') );
+            return new CasManager( config('cas') );
         });
     }
 
