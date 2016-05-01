@@ -1,9 +1,9 @@
 <?php namespace Subfission\Cas;
 
+
 use phpCAS;
 
-class CasManager
-{
+class CasManager {
 
     protected $config;
 
@@ -13,23 +13,33 @@ class CasManager
     public function __construct(array $config)
     {
         $this->parseConfig($config);
-        if ($this->config[ 'cas_debug' ] === true) {
+        if ($this->config['cas_debug'] === true)
+        {
             phpCAS::setDebug();
-        } else {
-            phpCAS::setDebug($this->config[ 'cas_debug' ]);
+            phpCAS::log('Loaded configuration:'. PHP_EOL . implode(PHP_EOL, $config));
+        } else
+        {
+            phpCAS::setDebug($this->config['cas_debug']);
         }
 
-        phpCAS::setVerbose($this->config[ 'cas_verbose_errors' ]);
+        phpCAS::setVerbose($this->config['cas_verbose_errors']);
 
-        session_name($this->config[ 'cas_session_name' ]);
+        session_name($this->config['cas_session_name']);
 
-        $this->configureCas($this->config[ 'cas_proxy' ] ? 'proxy' : 'client');
+        $this->configureCas($this->config['cas_proxy'] ? 'proxy' : 'client');
 
         $this->configureCasValidation();
 
         // set login and logout URLs of the CAS server
-        phpCAS::setServerLoginURL($this->config[ 'cas_login_url' ]);
-        phpCAS::setServerLogoutURL($this->config[ 'cas_logout_url' ]);
+        phpCAS::setServerLoginURL($this->config['cas_login_url']);
+
+        // If specified, this will override the URL the user will be returning to.
+        if ($this->config['cas_redirect_path'])
+        {
+            phpCAS::setFixedServiceURL($this->config['cas_redirect_path']);
+        }
+
+        phpCAS::setServerLogoutURL($this->config['cas_logout_url']);
     }
 
     /**
@@ -38,16 +48,17 @@ class CasManager
      */
     protected function configureCas($method = 'client')
     {
-        $server_version = $this->config[ 'cas_enable_saml' ] ? SAML_VERSION_1_1 : CAS_VERSION_2_0;
-        phpCAS::$method($server_version, $this->config[ 'cas_hostname' ], (int)$this->config[ 'cas_port' ],
-            $this->config[ 'cas_uri' ], $this->config[ 'cas_control_session' ]);
+        $server_type = $this->config['cas_enable_saml'] ? SAML_VERSION_1_1 : CAS_VERSION_2_0;
+        phpCAS::$method($server_type, $this->config['cas_hostname'], (int) $this->config['cas_port'],
+            $this->config['cas_uri'], $this->config['cas_control_session']);
 
-        if ($this->config[ 'cas_enable_saml' ]) {
+        if ($this->config['cas_enable_saml'])
+        {
             // Handle SAML logout requests that emanate from the CAS host exclusively.
             // Failure to restrict SAML logout requests to authorized hosts could
             // allow denial of service attacks where at the least the server is
             // tied up parsing bogus XML messages.
-            phpCAS::handleLogoutRequests(true, explode(',', $this->config[ 'cas_real_hosts' ]));
+            phpCAS::handleLogoutRequests(true, explode(',', $this->config['cas_real_hosts']));
         }
     }
 
@@ -69,8 +80,9 @@ class CasManager
             'cas_proxy'           => false,
             'cas_validate_cn'     => true,
             'cas_login_url'       => '',
-            'cas_logout_url'      => 'https://cas.myuniv.edu/cas/logout?service=',
-            'cas_redirect_path'   => 'home',
+            'cas_logout_url'      => 'https://cas.myuniv.edu/cas/logout',
+            'cas_logout_redirect' => '',
+            'cas_redirect_path'   => '',
             'cas_enable_saml'     => true,
             'cas_debug'           => false,
             'cas_verbose_errors'  => false,
@@ -88,9 +100,12 @@ class CasManager
      */
     protected function configureCasValidation()
     {
-        if ($this->config[ 'cas_validation' ] == 'ca' || $this->config[ 'cas_validation' ] == 'self') {
-            phpCAS::setCasServerCACert($this->config[ 'cas_cert' ], $this->config[ 'cas_validate_cn' ]);
-        } else {
+        if ($this->config['cas_validation'] == 'ca' || $this->config['cas_validation'] == 'self')
+        {
+            phpCAS::setCasServerCACert($this->config['cas_cert'], $this->config['cas_validate_cn']);
+        } else
+        {
+            // Not safe (does not validate your CAS server)
             phpCAS::setNoCasServerValidation();
         }
     }
@@ -102,7 +117,7 @@ class CasManager
      */
     public function authenticate()
     {
-        return $this->config[ 'cas_masquerade' ] ? true : phpCAS::forceAuthentication();
+        return $this->config['cas_masquerade'] ? true : phpCAS::forceAuthentication();
     }
 
     /**
@@ -111,7 +126,7 @@ class CasManager
      */
     public function user()
     {
-        return $this->config[ 'cas_masquerade' ] ? : phpCAS::getUser();
+        return $this->config['cas_masquerade'] ?: phpCAS::getUser();
     }
 
     public function getCurrentUser()
@@ -119,10 +134,27 @@ class CasManager
         return $this->user();
     }
 
-    public function logout($params = "")
+    /**
+     * Retrieve a specific attribute by key name
+     * @param $key
+     * @return mixed
+     */
+    public function getAttribute($key)
     {
-        if (phpCAS::isSessionAuthenticated()) {
-            phpCAS::logout($params);
+        return phpCAS::getAttribute($key);
+    }
+
+    public function logout()
+    {
+        if (phpCAS::isSessionAuthenticated())
+        {
+            if ($this->config['cas_logout_redirect'])
+            {
+                phpCAS::logoutWithRedirectService($this->config['cas_logout_redirect']);
+            } else
+            {
+                phpCAS::logout();
+            }
         }
     }
 
@@ -134,7 +166,7 @@ class CasManager
     public function getAttributes()
     {
         // We don't error check because phpCAS has it's own error handling
-        return $this->config[ 'cas_masquerade' ] ? null : phpCAS::getAttributes();
+        return $this->config['cas_masquerade'] ? null : phpCAS::getAttributes();
     }
 
     /**
@@ -147,4 +179,19 @@ class CasManager
         return phpCAS::isAuthenticated();
     }
 
+    /**
+     * Pass through undefined methods to phpCAS
+     *
+     * @param $method
+     * @param $params
+     * @return mixed
+     */
+    public function __call($method, $params)
+    {
+        if (method_exists('phpCAS', $method) && is_callable(['phpCAS', $method]))
+        {
+            return call_user_func_array(['phpCAS', $method], $params);
+        }
+        throw new \BadMethodCallException('Method not callable in phpCAS ' . $method . '::' . print_r($params, true));
+    }
 }

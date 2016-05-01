@@ -14,7 +14,7 @@ return [
     |--------------------------------------------------------------------------
     | Example: 'cas.myuniv.edu'.  This is used when SAML is active and is
     | recommended for protecting against DOS attacks.  If using load
-    | balanced hosts, then seperate each with a comma.
+    | balanced hosts, then separate each with a comma.
     */
     'cas_real_hosts'      => env('CAS_REAL_HOSTS', 'cas.myuniv.edu'),
 
@@ -102,14 +102,26 @@ return [
     | CAS Logout URI
     |--------------------------------------------------------------------------
     */
-    'cas_logout_url'      => env('CAS_LOGOUT_URL', 'https://cas.myuniv.edu/cas/logout?service='),
+    'cas_logout_url'      => env('CAS_LOGOUT_URL', 'https://cas.myuniv.edu/cas/logout'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | CAS Logout Redirect Services
+    |--------------------------------------------------------------------------
+    | If your server supports redirection services, enter the redirect url
+    | in this section.  If left blank, it will default to disabled.
+    */
+    'cas_logout_redirect' => env('CAS_LOGOUT_REDIRECT', ''),
 
     /*
     |--------------------------------------------------------------------------
     | CAS Successful Logon Redirection Url
     |--------------------------------------------------------------------------
+    | By default, CAS will assume that the user should be redirected to the
+    | page in which the call was initiated.  You can override this method
+    | and force the user to be redirected to a specific URL here.
     */
-    'cas_redirect_path'   => env('CAS_REDIRECT_PATH', 'home'),
+    'cas_redirect_path'   => env('CAS_REDIRECT_PATH', ''),
 
     /*
     |--------------------------------------------------------------------------
