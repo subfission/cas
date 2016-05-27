@@ -24,16 +24,15 @@ class CASAuth
      */
     public function handle($request, Closure $next)
     {
-        if ( ! session('cas_user') ) {
+        if( $this->cas->isAuthenticated() )
+        {
+            // Store the user credentials in a Laravel managed session
+            session()->put('cas_user', $this->cas->user());
+        } else {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             }
-            if ( ! $this->cas->isAuthenticated()) {
-                $this->cas->authenticate();
-            }
-            // We setup CAS here to reduce the amount of objects we need to build at runtime.  This
-            // way, we only create the CAS calls only if the user has not yet authenticated.
-            session()->put('cas_user', $this->cas->user());
+            $this->cas->authenticate();
         }
 
         return $next($request);
