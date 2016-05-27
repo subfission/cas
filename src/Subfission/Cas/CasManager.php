@@ -16,7 +16,7 @@ class CasManager {
         if ($this->config['cas_debug'] === true)
         {
             phpCAS::setDebug();
-            phpCAS::log('Loaded configuration:'. PHP_EOL . implode(PHP_EOL, $config));
+            phpCAS::log('Loaded configuration:'. PHP_EOL . serialize($config));
         } else
         {
             phpCAS::setDebug($this->config['cas_debug']);
@@ -121,6 +121,16 @@ class CasManager {
     }
 
     /**
+     * Returns the current config.
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * Retrieve authenticated credentials
      * @return string
      */
@@ -148,13 +158,18 @@ class CasManager {
     {
         if (phpCAS::isSessionAuthenticated())
         {
-            if ($this->config['cas_logout_redirect'])
+            if(isset($_SESSION['phpCAS']))
             {
-                phpCAS::logoutWithRedirectService($this->config['cas_logout_redirect']);
-            } else
-            {
-                phpCAS::logout();
+                $serialized = serialize($_SESSION['phpCAS']);
             }
+            phpCAS::log('Logout requested, but no session data found for user:'. PHP_EOL . $serialized );
+        }
+        if ($this->config['cas_logout_redirect'])
+        {
+            phpCAS::logoutWithRedirectService($this->config['cas_logout_redirect']);
+        } else
+        {
+            phpCAS::logout();
         }
     }
 
