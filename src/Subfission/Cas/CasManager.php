@@ -154,7 +154,7 @@ class CasManager {
         return phpCAS::getAttribute($key);
     }
 
-    public function logout()
+    public function logout($url = '')
     {
         if (phpCAS::isSessionAuthenticated())
         {
@@ -164,13 +164,25 @@ class CasManager {
             }
             phpCAS::log('Logout requested, but no session data found for user:'. PHP_EOL . $serialized );
         }
+        $params = [];
         if ($this->config['cas_logout_redirect'])
         {
-            phpCAS::logoutWithRedirectService($this->config['cas_logout_redirect']);
-        } else
+            $params['service'] = $this->config['cas_logout_redirect'];
+        } 
+        if($url)
         {
-            phpCAS::logout();
+            $params['url'] = $url;
         }
+        empty($params) ? phpCAS::logout() : phpCAS::logout($params);
+    }
+    
+    
+    /**
+     * Logout the user using the provided URL.
+     */
+    public function logoutWithUrl($url)
+    {
+        $this->logout($url);
     }
 
     /**
