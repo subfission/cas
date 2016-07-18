@@ -203,7 +203,7 @@ class CasManager {
      */
     public function isAuthenticated()
     {
-        return phpCAS::isAuthenticated();
+        return $this->config['cas_masquerade'] ? true : phpCAS::isAuthenticated();
     }
 
     /**
