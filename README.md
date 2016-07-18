@@ -23,4 +23,4 @@ goal in this project is to be as minimal as possible while offering as much flex
 * Tested and working with PHP 7.x
 
 
-Check out the [wiki](https://github.com/subfission/cas/wiki) for futher details
+Check out the [wiki](https://github.com/subfission/cas/wiki) for further details.
