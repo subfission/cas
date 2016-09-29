@@ -80,7 +80,7 @@ class CasManager {
             'cas_hostname'        => '',
             'cas_session_name'    => 'CASAuth',
             'cas_session_lifetime'=> 7200,
-            'cas_session_path'    => '/'
+            'cas_session_path'    => '/',
             'cas_control_session' => false,
             'cas_port'            => 443,
             'cas_uri'             => '/cas',
