@@ -25,6 +25,13 @@ class CasManager {
         phpCAS::setVerbose($this->config['cas_verbose_errors']);
 
         session_name($this->config['cas_session_name']);
+        
+        // Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
+        session_set_cookie_params($this->config['cas_session_lifetime'], 
+                                  $this->config['cas_session_path'], 
+                                  env('APP_DOMAIN'), 
+                                  env('HTTPS_ONLY_COOKIES'), 
+                                  true);
 
         $this->configureCas($this->config['cas_proxy'] ? 'proxy' : 'client');
 
@@ -72,6 +79,8 @@ class CasManager {
         $defaults = [
             'cas_hostname'        => '',
             'cas_session_name'    => 'CASAuth',
+            'cas_session_lifetime'=> 7200,
+            'cas_session_path'    => '/'
             'cas_control_session' => false,
             'cas_port'            => 443,
             'cas_uri'             => '/cas',
