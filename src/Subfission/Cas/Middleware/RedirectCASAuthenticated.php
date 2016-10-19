@@ -25,7 +25,7 @@ class RedirectCASAuthenticated {
 	{
 		if($this->cas->isAuthenticated())
 		{
-			return redirect(config('redirect_path', 'home'));
+			return redirect(config('cas.cas_redirect_path'));
 		}
 
 		return $next($request);
