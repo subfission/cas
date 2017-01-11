@@ -158,5 +158,13 @@ return [
     | This should only be used for developmental purposes.  getAttributes()
     | will return null in this condition.
      */
-    'cas_masquerade'      => env('CAS_MASQUERADE', '')
+    'cas_masquerade'      => env('CAS_MASQUERADE', ''),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | This will call the internal laravel authentication
+    | The app needs to have a User class with Authenticatable interface.
+    | https://laravel.com/docs/5.3/authentication#the-authenticatable-contract
+     */
+    'use_laravel_sessions'      => env('CAS_USE_LARAVEL_SESSIONS', false)
 ];
