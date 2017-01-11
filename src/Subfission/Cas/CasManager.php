@@ -96,7 +96,8 @@ class CasManager {
             'cas_debug'           => false,
             'cas_verbose_errors'  => false,
             'cas_masquerade'      => '',
-            'use_laravel_sessions'=> false
+            'use_laravel_sessions'=> false,
+            'user_cas_attribute'  => 'id'
         ];
 
         $this->config = array_merge($defaults, $config);
