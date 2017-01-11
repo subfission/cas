@@ -95,7 +95,8 @@ class CasManager {
             'cas_enable_saml'     => true,
             'cas_debug'           => false,
             'cas_verbose_errors'  => false,
-            'cas_masquerade'      => ''
+            'cas_masquerade'      => '',
+            'use_laravel_sessions'=> false
         ];
 
         $this->config = array_merge($defaults, $config);
