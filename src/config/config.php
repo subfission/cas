@@ -172,6 +172,6 @@ return [
     |--------------------------------------------------------------------------
     | The User attribute that matches with the cas user id
      */
-     'user_cas_id'  => env('CAS_USER_CAS_ID', 'id')
+     'user_cas_attribute'  => env('CAS_USER_CAS_ATTRIBUTE', 'id')
 
 ];
