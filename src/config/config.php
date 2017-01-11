@@ -166,5 +166,12 @@ return [
     | The app needs to have a User class with Authenticatable interface.
     | https://laravel.com/docs/5.3/authentication#the-authenticatable-contract
      */
-    'use_laravel_sessions'      => env('CAS_USE_LARAVEL_SESSIONS', false)
+    'use_laravel_sessions'      => env('CAS_USE_LARAVEL_SESSIONS', false),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | The User attribute that matches with the cas user id
+     */
+     'user_cas_id'  => env('CAS_USER_CAS_ID', 'id')
+
 ];
