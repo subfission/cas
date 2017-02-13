@@ -244,7 +244,7 @@ class CasManager {
     public function getAttributes()
     {
         // We don't error check because phpCAS has it's own error handling
-        return $this->isMasquerading() ? $this->attributes : phpCAS::getAttributes();
+        return $this->isMasquerading() ? $this->_attributes : phpCAS::getAttributes();
     }
 
     /**
@@ -269,7 +269,7 @@ class CasManager {
     
     public function setAttributes(array $attr)
     {
-        $this->attributes = $attr;
+        $this->_attributes = $attr;
         phpCAS::log('Forced setting of user masquerading attributes: ' . serialize($attr));
     }
     
