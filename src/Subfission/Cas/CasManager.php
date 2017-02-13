@@ -206,7 +206,7 @@ class CasManager {
     }
     
     /**
-     * Check for the existance of a key in attributes.
+     * Check for the existence of a key in attributes.
      *
      * @param $key
      * @return boolean
@@ -222,6 +222,8 @@ class CasManager {
 
     /**
      * Logout of the CAS session and redirect users.
+     *
+     * @param string $url
      */
     public function logout($url = '')
     {
@@ -244,10 +246,12 @@ class CasManager {
         }
         empty($params) ? phpCAS::logout() : phpCAS::logout($params);
     }
-    
-    
+
+
     /**
      * Logout the user using the provided URL.
+     *
+     * @param $url
      */
     public function logoutWithUrl($url)
     {
