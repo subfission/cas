@@ -5,7 +5,20 @@ use phpCAS;
 
 class CasManager {
 
+    /**
+     * Array for storing configuration settings.
+     */
     protected $config;
+    
+    /**
+     * Attributes used for overriding or masquerading.
+     */
+    protected $_attributes = [];
+    
+    /**
+     * Boolean flag used for masquerading as a user.
+     */
+    protected $_masquerading = false;
 
     /**
      * @param array $config
@@ -47,10 +60,17 @@ class CasManager {
         }
 
         phpCAS::setServerLogoutURL($this->config['cas_logout_url']);
+        
+        if ($this->config['cas_masquerade'])
+        {
+            $this->_masquerading = true;
+            phpCAS::log('Masquerading as user: '. $this->config['cas_masquerade']);
+        }
     }
 
     /**
      * Configure CAS Client|Proxy
+     *
      * @param $method
      */
     protected function configureCas($method = 'client')
@@ -71,6 +91,7 @@ class CasManager {
 
     /**
      * Maintain backwards compatibility with config file
+     *
      * @param array $config
      */
     protected function parseConfig(array $config)
@@ -126,7 +147,11 @@ class CasManager {
      */
     public function authenticate()
     {
-        return $this->config['cas_masquerade'] ? true : phpCAS::forceAuthentication();
+        if ($this->isMasquerading())
+        {
+            return true;
+        }
+        return phpCAS::forceAuthentication();
     }
 
     /**
@@ -140,12 +165,18 @@ class CasManager {
     }
 
     /**
-     * Retrieve authenticated credentials
+     * Retrieve authenticated credentials.
+     * Returns either the masqueraded account or the phpCAS user.
+     *
      * @return string
      */
     public function user()
     {
-        return $this->config['cas_masquerade'] ?: phpCAS::getUser();
+        if ($this->isMasquerading())
+        {
+            return $this->config['cas_masquerade'];
+        }
+        return phpCAS::getUser();
     }
 
     public function getCurrentUser()
@@ -154,15 +185,46 @@ class CasManager {
     }
 
     /**
-     * Retrieve a specific attribute by key name
+     * Retrieve a specific attribute by key name.  The
+     * attribute returned can be either a string or
+     * an array based on matches.
+     *
      * @param $key
      * @return mixed
      */
     public function getAttribute($key)
     {
-        return phpCAS::getAttribute($key);
+        if ($this->isMasquerading()) 
+        {
+            if ($this->hasAttribute($key))
+            {
+                return $this->_attributes[$key];
+            }
+        } else {
+            return phpCAS::getAttribute($key);
+        }
+    }
+    
+    /**
+     * Check for the existence of a key in attributes.
+     *
+     * @param $key
+     * @return boolean
+     */    
+    public function hasAttribute($key)
+    {
+        if ($this->isMasquerading()) 
+        {
+            return array_key_exists($key, $this->_attributes);
+        }
+        return phpCAS::hasAttribute($key);
     }
 
+    /**
+     * Logout of the CAS session and redirect users.
+     *
+     * @param string $url
+     */
     public function logout($url = '')
     {
         if (phpCAS::isSessionAuthenticated())
@@ -184,10 +246,12 @@ class CasManager {
         }
         empty($params) ? phpCAS::logout() : phpCAS::logout($params);
     }
-    
-    
+
+
     /**
      * Logout the user using the provided URL.
+     *
+     * @param $url
      */
     public function logoutWithUrl($url)
     {
@@ -197,24 +261,47 @@ class CasManager {
     /**
      * Get the attributes for for the currently connected user. This method
      * can only be called after authenticate() or an error wil be thrown.
+     *
      * @return mixed
      */
     public function getAttributes()
     {
-        // We don't error check because phpCAS has it's own error handling
-        return $this->config['cas_masquerade'] ? null : phpCAS::getAttributes();
+        // We don't error check because phpCAS has its own error handling.
+        return $this->isMasquerading() ? $this->_attributes : phpCAS::getAttributes();
     }
 
     /**
      * Checks to see is user is authenticated
      *
-     * @return bool
+     * @return boolean
      */
     public function isAuthenticated()
     {
-        return $this->config['cas_masquerade'] ? true : phpCAS::isAuthenticated();
+        return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
     }
 
+    /**
+     * Checks to see if masquerading is enabled
+     *
+     * @return bool
+     */
+    public function isMasquerading()
+    {
+        return $this->_masquerading;
+    }
+    
+    /**
+     * Set the attributes for a user when masquerading. This
+     * method has no effect when not masquerading.
+     *
+     * @param array $attr: the attributes of the user.
+     */
+    public function setAttributes(array $attr)
+    {
+        $this->_attributes = $attr;
+        phpCAS::log('Forced setting of user masquerading attributes: ' . serialize($attr));
+    }
+    
     /**
      * Pass through undefined methods to phpCAS
      *
