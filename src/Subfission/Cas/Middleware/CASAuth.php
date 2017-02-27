@@ -29,7 +29,7 @@ class CASAuth
             // Store the user credentials in a Laravel managed session
             session()->put('cas_user', $this->cas->user());
         } else {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             }
             $this->cas->authenticate();
