@@ -68,7 +68,7 @@ return [
     |
     | VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL
     */
-    'validation'          => env('CAS_VALIDATION', ''),
+    'cas_validation'          => env('CAS_VALIDATION', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     | Path to the CA certificate file.  For production use set
     | the CA certificate that is the issuer of the cert
     */
-    'cert'                => env('CAS_CERT', ''),
+    'cas_cert'                => env('CAS_CERT', ''),
 
     /*
     |--------------------------------------------------------------------------
