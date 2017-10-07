@@ -18,6 +18,15 @@ return [
     */
     'cas_real_hosts'      => env('CAS_REAL_HOSTS', 'cas.myuniv.edu'),
 
+    /*
+     |-------------------------------------------------------------------------
+     | Override version of the CAS server
+     |-------------------------------------------------------------------------
+     | use : 'CAS_VERSION_1_0' or 'CAS_VERSION_2_0' or 'CAS_VERSION_3_0' or 'SAML_VERSION_1_1'
+     | if blank will set to 'CAS_VERSION_2_0' or 'SAML_VERSION_1_1' if cas_enable_saml be true
+     |-------------------------------------------------------------------------
+     */
+    'cas_type'            => env('CAS_TYPE', ''),
 
     /*
     |--------------------------------------------------------------------------
