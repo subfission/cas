@@ -134,12 +134,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CAS will support version 1,2,3 of the protocol.  It is reccommended
-    | to use version 2,3, or SAML 1.1.  If you enable SAML, then that
+    | CAS will support version 1.0, 2.0, 3.0 of the protocol.  It is recommended
+    | to use version 2.0, 3.0, or SAML 1.1.  If you enable SAML, then that
     | will override this configuration.
     |--------------------------------------------------------------------------
-    */    
-    'cas_version'         => env('CAS_VERSION', 2),
+    */
+    'cas_version'         => env('CAS_VERSION', "2.0"),
     
     /*
     |--------------------------------------------------------------------------
@@ -151,7 +151,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'cas_debug'           => env('CAS_DEBUG', false),
-
 
     /*
     |--------------------------------------------------------------------------
