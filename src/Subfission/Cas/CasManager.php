@@ -226,8 +226,9 @@ class CasManager {
 	 * Logout of the CAS session and redirect users.
 	 *
 	 * @param string $url
+	 * @param string $service
 	 */
-	public function logout( $url = '' ) {
+	public function logout( $url = '', $service = '' ) {
 		if ( phpCAS::isSessionAuthenticated() ) {
 			if ( isset( $_SESSION['phpCAS'] ) ) {
 				$serialized = serialize( $_SESSION['phpCAS'] );
@@ -236,13 +237,16 @@ class CasManager {
 			}
 		}
 		$params = [];
-		if ( $this->config['cas_logout_redirect'] ) {
+		if ( $service ) {
+			$params['service'] = $service;
+		} elseif ($this->config['cas_logout_redirect']){
 			$params['service'] = $this->config['cas_logout_redirect'];
 		}
 		if ( $url ) {
 			$params['url'] = $url;
 		}
-		empty( $params ) ? phpCAS::logout() : phpCAS::logout( $params );
+		phpCAS::logout( $params );
+		exit;
 	}
 
 
