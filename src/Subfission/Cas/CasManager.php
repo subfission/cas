@@ -74,11 +74,15 @@ class CasManager {
 		if ( $this->config['cas_enable_saml'] ) {
 			$server_type = SAML_VERSION_1_1;
 		} else {
-			$cas_ver = 'CAS_VERSION_' . str_replace( '.', '_',
-					$this->config['cas_version'] );
-			if ( defined( $cas_ver ) ) {
-				$server_type = $cas_ver;
-			} else {
+			// This allows the user to use 1.0, 2.0, etc as a string in the config
+			$cas_version_str = 'CAS_VERSION_' . str_replace( '.', '_', $this->config['cas_version'] );
+
+			// We pull the phpCAS constant values as this is their definition
+			// PHP will generate a E_WARNING if the version string is invalid which is helpful for troubleshooting
+			$server_type = constant($cas_version_str);
+
+			if ( is_null($server_type)  ) {
+				// This will never be null, but can be invalid values for which we need to detect and substitute.
 				phpCAS::log( 'Invalid CAS version set; Reverting to defaults' );
 				$server_type = CAS_VERSION_2_0;
 			}
@@ -277,7 +281,7 @@ class CasManager {
 	 * @return boolean
 	 */
 	public function isAuthenticated() {
-		return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
+		return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
 	}
 
 	/**
