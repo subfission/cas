@@ -71,18 +71,17 @@ class CasManager {
 	 * @param $method
 	 */
 	protected function configureCas( $method = 'client' ) {
-		if ( $this->config['cas_enable_saml'] ) {
-			$server_type = SAML_VERSION_1_1;
-		} else {
-			$cas_ver = 'CAS_VERSION_' . str_replace( '.', '_',
-					$this->config['cas_version'] );
-			if ( defined( $cas_ver ) ) {
-				$server_type = $cas_ver;
-			} else {
-				phpCAS::log( 'Invalid CAS version set; Reverting to defaults' );
-				$server_type = CAS_VERSION_2_0;
-			}
-		}
+        if ( $this->config['cas_enable_saml'] ) {
+            $server_type = SAML_VERSION_1_1;
+        } else {
+            // phpCAS takes care of the validity of the version
+            if ( $this->config['cas_version'] ) {
+                $server_type = $this->config['cas_version'];
+            } else {
+                phpCAS::log( 'No CAS version defined; Reverting to defaults' );
+                $server_type = CAS_VERSION_2_0;
+            }
+        }
 
 		phpCAS::$method( $server_type, $this->config['cas_hostname'],
 			(int) $this->config['cas_port'],
