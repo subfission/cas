@@ -23,7 +23,7 @@ class RedirectCASAuthenticated {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if($this->cas->isAuthenticated())
+		if($this->cas->checkAuthentication())
 		{
 			return redirect(config('cas.cas_redirect_path'));
 		}

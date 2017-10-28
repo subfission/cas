@@ -276,7 +276,7 @@ class CasManager {
 	}
 
 	/**
-	 * Checks to see is user is authenticated
+	 * Checks to see is user is authenticated locally
 	 *
 	 * @return boolean
 	 */
@@ -284,7 +284,16 @@ class CasManager {
 		return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
 	}
 
-	/**
+    /**
+     * Checks to see is user is globally in CAS
+     *
+     * @return boolean
+     */
+    public function checkAuthentication() {
+        return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
+    }
+
+    /**
 	 * Checks to see if masquerading is enabled
 	 *
 	 * @return bool
