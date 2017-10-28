@@ -24,7 +24,7 @@ class CASAuth
      */
     public function handle($request, Closure $next)
     {
-        if( $this->cas->isAuthenticated() )
+        if( $this->cas->checkAuthentication() )
         {
             // Store the user credentials in a Laravel managed session
             session()->put('cas_user', $this->cas->user());
