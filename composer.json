@@ -36,5 +36,15 @@
       "Subfission\\Cas\\Tests\\": "tests"
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Subfission\\Cas\\CasServiceProvider"
+      ],
+      "aliases": {
+        "Cas": "Subfission\\Cas\\Facades\\Cas"
+      }
+    }
+  }
 }
