@@ -1,7 +1,9 @@
 <?php namespace Subfission\Cas;
 
 
+use CAS_GracefullTerminationException;
 use phpCAS;
+use Subfission\Cas\Exceptions\CasHttpResponseException;
 
 class CasManager {
 
@@ -25,6 +27,7 @@ class CasManager {
 	 */
 	public function __construct( array $config ) {
 		$this->parseConfig( $config );
+		CAS_GracefullTerminationException::throwInsteadOfExiting();
 		if ( $this->config['cas_debug'] === true ) {
 			phpCAS::setDebug();
 			phpCAS::log( 'Loaded configuration:' . PHP_EOL
@@ -97,8 +100,12 @@ class CasManager {
 			// Failure to restrict SAML logout requests to authorized hosts could
 			// allow denial of service attacks where at the least the server is
 			// tied up parsing bogus XML messages.
-			phpCAS::handleLogoutRequests( true,
-				explode( ',', $this->config['cas_real_hosts'] ) );
+			try {
+				phpCAS::handleLogoutRequests( true,
+					explode( ',', $this->config['cas_real_hosts'] ) );
+			} catch ( CAS_GracefullTerminationException $e ) {
+				throw new CasHttpResponseException( $e );
+			}
 		}
 	}
 
@@ -161,8 +168,11 @@ class CasManager {
 		if ( $this->isMasquerading() ) {
 			return true;
 		}
-
-		return phpCAS::forceAuthentication();
+		try {
+			return phpCAS::forceAuthentication();
+		} catch ( CAS_GracefullTerminationException $e ) {
+			throw new CasHttpResponseException( $e );
+		}
 	}
 
 	/**
@@ -249,7 +259,11 @@ class CasManager {
 		if ( $url ) {
 			$params['url'] = $url;
 		}
-		phpCAS::logout( $params );
+		try {
+			phpCAS::logout( $params );
+		} catch ( CAS_GracefullTerminationException $e ) {
+			throw new CasHttpResponseException( $e );
+		}
 		exit;
 	}
 
@@ -281,7 +295,11 @@ class CasManager {
 	 * @return boolean
 	 */
 	public function isAuthenticated() {
-		return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
+		try {
+			return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
+		} catch ( CAS_GracefullTerminationException $e ) {
+			throw new CasHttpResponseException( $e );
+		}
 	}
 
     /**
@@ -290,7 +308,11 @@ class CasManager {
      * @return boolean
      */
     public function checkAuthentication() {
-        return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
+        try {
+            return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
+        } catch ( CAS_GracefullTerminationException $e ) {
+            throw new CasHttpResponseException( $e );
+        }
     }
 
     /**
