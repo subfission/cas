@@ -17,6 +17,7 @@
   ],
   "require": {
     "php": ">=5.5.0",
+    "illuminate/http": "5.x",
     "illuminate/support": "5.x",
     "jasig/phpcas": "~1.3.4"
   },
