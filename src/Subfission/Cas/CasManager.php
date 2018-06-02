@@ -35,14 +35,17 @@ class CasManager {
 
 		phpCAS::setVerbose( $this->config['cas_verbose_errors'] );
 
-		session_name( $this->config['cas_session_name'] );
+		// Fix for PHP 7.2.  See http://php.net/manual/en/function.session-name.php
+		if ( session_id() == "" ) {
+			session_name( $this->config['cas_session_name'] );
 
-		// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
-		session_set_cookie_params( $this->config['cas_session_lifetime'],
-			$this->config['cas_session_path'],
-			env( 'APP_DOMAIN' ),
-			env( 'HTTPS_ONLY_COOKIES' ),
-			true );
+			// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
+			session_set_cookie_params( $this->config['cas_session_lifetime'],
+				$this->config['cas_session_path'],
+				env( 'APP_DOMAIN' ),
+				env( 'HTTPS_ONLY_COOKIES' ),
+				$this->config['cas_session_httponly'] );
+		}
 
 		$this->configureCas( $this->config['cas_proxy'] ? 'proxy' : 'client' );
 
@@ -75,13 +78,14 @@ class CasManager {
 			$server_type = SAML_VERSION_1_1;
 		} else {
 			// This allows the user to use 1.0, 2.0, etc as a string in the config
-			$cas_version_str = 'CAS_VERSION_' . str_replace( '.', '_', $this->config['cas_version'] );
+			$cas_version_str = 'CAS_VERSION_' . str_replace( '.', '_',
+					$this->config['cas_version'] );
 
 			// We pull the phpCAS constant values as this is their definition
 			// PHP will generate a E_WARNING if the version string is invalid which is helpful for troubleshooting
-			$server_type = constant($cas_version_str);
+			$server_type = constant( $cas_version_str );
 
-			if ( is_null($server_type)  ) {
+			if ( is_null( $server_type ) ) {
 				// This will never be null, but can be invalid values for which we need to detect and substitute.
 				phpCAS::log( 'Invalid CAS version set; Reverting to defaults' );
 				$server_type = CAS_VERSION_2_0;
@@ -115,6 +119,7 @@ class CasManager {
 			'cas_session_lifetime' => 7200,
 			'cas_session_path'     => '/',
 			'cas_control_session'  => false,
+			'cas_session_httponly' => true,
 			'cas_port'             => 443,
 			'cas_uri'              => '/cas',
 			'cas_validation'       => '',
@@ -208,6 +213,7 @@ class CasManager {
 		if ( $this->hasAttribute( $key ) ) {
 			return $this->_attributes[ $key ];
 		}
+
 		return;
 	}
 
@@ -243,7 +249,7 @@ class CasManager {
 		$params = [];
 		if ( $service ) {
 			$params['service'] = $service;
-		} elseif ($this->config['cas_logout_redirect']){
+		} elseif ( $this->config['cas_logout_redirect'] ) {
 			$params['service'] = $this->config['cas_logout_redirect'];
 		}
 		if ( $url ) {
@@ -284,16 +290,16 @@ class CasManager {
 		return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
 	}
 
-    /**
-     * Checks to see is user is globally in CAS
-     *
-     * @return boolean
-     */
-    public function checkAuthentication() {
-        return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
-    }
+	/**
+	 * Checks to see is user is globally in CAS
+	 *
+	 * @return boolean
+	 */
+	public function checkAuthentication() {
+		return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
+	}
 
-    /**
+	/**
 	 * Checks to see if masquerading is enabled
 	 *
 	 * @return bool
