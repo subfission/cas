@@ -36,7 +36,7 @@ class CasManager {
 		phpCAS::setVerbose( $this->config['cas_verbose_errors'] );
 
 		// Fix for PHP 7.2.  See http://php.net/manual/en/function.session-name.php
-		if ( session_id() == "" ) {
+		if ( !headers_sent() && session_id() == "" ) {
 			session_name( $this->config['cas_session_name'] );
 
 			// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
