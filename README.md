@@ -1,12 +1,14 @@
 # CAS
-Simple CAS Authentication for Laravel 5.x
+Simple CAS Authentication for Laravel 5.x & 6.x.
 
 This version is a highly modified version of "xavrsl/cas" with specific priority on simplicity and functionality with 
-Laravel 5+.  While this will likely still work with older versions, they are untested. This package was built for my 
+Laravel 5 and **updated for 6**.  While this will likely still work with older versions, they are untested. This package was built for my 
 necessity but can be easily used for anyone requiring CAS in Laravel 5.  This package is different in mindset as the 
 goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
 ## Updates
+* Updated for Laravel 6.x
+* Dropped support for PHP 5.x
 * Laravel 5.5 Package Discovery support
 * CAS logout method supports redirection service as a secondary argument
 * Supports additional CAS versions, including version 1,2,3
