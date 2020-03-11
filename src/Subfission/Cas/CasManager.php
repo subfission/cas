@@ -66,6 +66,10 @@ class CasManager {
 			phpCAS::log( 'Masquerading as user: '
 			             . $this->config['cas_masquerade'] );
 		}
+
+        $serverBaseURL = 'https://' . $this->config['cas_hostname'] . $this->config['cas_uri']
+            .'/serviceValidate' . $this->config['cas_service_validate_query'];
+        phpCAS::setServerServiceValidateURL($serverBaseURL);
 	}
 
 	/**
