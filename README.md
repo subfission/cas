@@ -7,6 +7,7 @@ necessity but can be easily used for anyone requiring CAS in Laravel 5.  This pa
 goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
 ## Updates
+* Updated for Laravel 7.x
 * Updated for Laravel 6.x
 * Dropped support for PHP 5.x
 * Laravel 5.5 Package Discovery support
