@@ -47,6 +47,13 @@ class CasManager {
 				$this->config['cas_session_httponly'] );
 		}
 
+        if ( $this->config['cas_masquerade'] ) {
+            $this->_masquerading = true;
+            phpCAS::log( 'Masquerading as user: '
+                . $this->config['cas_masquerade'] );
+            return true;
+        }
+
 		$this->configureCas( $this->config['cas_proxy'] ? 'proxy' : 'client' );
 
 		$this->configureCasValidation();
@@ -60,12 +67,6 @@ class CasManager {
 		}
 
 		phpCAS::setServerLogoutURL( $this->config['cas_logout_url'] );
-
-		if ( $this->config['cas_masquerade'] ) {
-			$this->_masquerading = true;
-			phpCAS::log( 'Masquerading as user: '
-			             . $this->config['cas_masquerade'] );
-		}
 
         $serverBaseURL = 'https://' . $this->config['cas_hostname'] . $this->config['cas_uri']
             .'/serviceValidate' . $this->config['cas_service_validate_query'];
