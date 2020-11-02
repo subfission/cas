@@ -6,7 +6,7 @@ Older version of Laravel may work, but are untested. This package was built for 
 necessity but can be easily used for anyone requiring CAS/SAML SSO in Laravel 6+.  This package is different in mindset as the 
 goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
-This package offers and abstraction of [Apero CAS](https://www.apereo.org/projects/cas) (phpCAS), a cross platform and open-source *CAS client* and *server* provider.  Be sure to check them out if you intend to implement an SSO service other than AD.
+This package offers and abstraction of [Apereo CAS](https://www.apereo.org/projects/cas) (phpCAS), a cross platform and open-source *CAS client* and *server* provider.  Be sure to check them out if you intend to implement an SSO service other than AD.
 
 Check out the [wiki](https://github.com/subfission/cas/wiki) for further details.
 
