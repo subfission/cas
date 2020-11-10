@@ -1,12 +1,14 @@
 {
-  "name": "ec-doris/php-cas",
-  "description": "Adds CAS to laravel 7.x",
+  "name": "subfission/cas",
+  "description": "Adds CAS support to Laravel 5.x, 6.x, 7.x & 8.x",
   "keywords": [
     "CAS",
     "phpCAS",
     "SSO",
     "laravel",
-    "laravel 6"
+    "laravel 6",
+    "laravel 7",
+    "laravel 8"
   ],
   "license": "MIT",
   "authors": [
