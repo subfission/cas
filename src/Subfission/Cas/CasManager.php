@@ -26,7 +26,12 @@ class CasManager {
 	public function __construct( array $config ) {
 		$this->parseConfig( $config );
 		if ( $this->config['cas_debug'] === true ) {
-			phpCAS::setDebug();
+			try {
+				phpCAS::setDebug();
+			catch (ErrorException) {
+				// Fix for depreciation of setDebug
+				phpCAS::setLogger();
+			}
 			phpCAS::log( 'Loaded configuration:' . PHP_EOL
 			             . serialize( $config ) );
 		} else {
