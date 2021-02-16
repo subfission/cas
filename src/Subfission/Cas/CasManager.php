@@ -28,7 +28,7 @@ class CasManager {
 		if ( $this->config['cas_debug'] === true ) {
 			try {
 				phpCAS::setDebug();
-			catch (ErrorException) {
+			} catch (ErrorException) {
 				// Fix for depreciation of setDebug
 				phpCAS::setLogger();
 			}
