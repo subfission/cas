@@ -26,16 +26,7 @@ class CasManager {
 	public function __construct( array $config ) {
 		$this->parseConfig( $config );
 		if ( $this->config['cas_debug'] === true ) {
-			try {
-				phpCAS::setDebug();
-			} catch (ErrorException) {
-				// Fix for depreciation of setDebug
-				phpCAS::setLogger();
-			}
-			phpCAS::log( 'Loaded configuration:' . PHP_EOL
-			             . serialize( $config ) );
-		} else {
-			phpCAS::setDebug( $this->config['cas_debug'] );
+			$this->enableDebugCas();
 		}
 
 		phpCAS::setVerbose( $this->config['cas_verbose_errors'] );
@@ -72,7 +63,22 @@ class CasManager {
 			             . $this->config['cas_masquerade'] );
 		}
 	}
-
+	
+	/**
+	 * Enable debug mode for CAS
+	 *
+	 * @param $enabled
+	 */
+	protected function enableDebugCas() {
+		try {
+			phpCAS::setDebug();
+		} catch (\Exception $e) {
+			// Fix for depreciation of setDebug
+			phpCAS::setLogger();
+		}
+		phpCAS::log( 'Loaded configuration:' . PHP_EOL
+			             . serialize( $config ) );
+	}
 	/**
 	 * Configure CAS Client|Proxy
 	 *
