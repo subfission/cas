@@ -77,7 +77,7 @@ class CasManager {
 			phpCAS::setLogger();
 		}
 		phpCAS::log( 'Loaded configuration:' . PHP_EOL
-			             . serialize( $config ) );
+			             . serialize( $this->config ) );
 	}
 	/**
 	 * Configure CAS Client|Proxy
