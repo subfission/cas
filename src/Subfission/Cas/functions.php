@@ -5,7 +5,7 @@
  * Licence: MIT
  ***********************************/
 
-if ( ! function_exists('cas')) {
+if (! function_exists('cas')) {
     /**
      * Initiate CAS hook.
      *

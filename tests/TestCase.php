@@ -2,8 +2,8 @@
 
 namespace Subfission\Cas\Tests;
 
-use Subfission\Cas\CasServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Subfission\Cas\CasServiceProvider;
 
 class TestCase extends Orchestra
 {

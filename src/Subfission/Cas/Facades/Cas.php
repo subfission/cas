@@ -1,4 +1,6 @@
-<?php namespace Subfission\Cas\Facades;
+<?php
+
+namespace Subfission\Cas\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -19,7 +21,8 @@ use Illuminate\Support\Facades\Facade;
  *
  * @see \Subfission\Cas\CasManager
  */
-class Cas extends Facade {
+class Cas extends Facade
+{
     /**
      * Get the registered name of the component.
      *
@@ -27,5 +30,8 @@ class Cas extends Facade {
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'cas'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'cas';
+    }
 }
