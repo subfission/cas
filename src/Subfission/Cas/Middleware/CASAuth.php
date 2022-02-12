@@ -1,11 +1,12 @@
-<?php namespace Subfission\Cas\Middleware;
+<?php
+
+namespace Subfission\Cas\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
 class CASAuth
 {
-
     protected $auth;
     protected $cas;
 
@@ -24,8 +25,7 @@ class CASAuth
      */
     public function handle($request, Closure $next)
     {
-        if( $this->cas->checkAuthentication() )
-        {
+        if ($this->cas->checkAuthentication()) {
             // Store the user credentials in a Laravel managed session
             session()->put('cas_user', $this->cas->user());
         } else {

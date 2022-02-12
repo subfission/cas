@@ -1,10 +1,11 @@
-<?php namespace Subfission\Cas;
+<?php
+
+namespace Subfission\Cas;
 
 use Illuminate\Support\ServiceProvider;
 
 class CasServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -32,7 +33,7 @@ class CasServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cas', function () {
-            return new CasManager( config('cas') );
+            return new CasManager(config('cas'));
         });
     }
 
@@ -43,7 +44,6 @@ class CasServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('cas');
+        return ['cas'];
     }
-
 }
