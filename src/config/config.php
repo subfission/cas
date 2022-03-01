@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | Example: 'cas.myuniv.edu'.
     */
-    'cas_hostname'        => env('CAS_HOSTNAME', 'cas.myuniv.edu'),
+    'cas_hostname' => env('CAS_HOSTNAME', 'cas.myuniv.edu'),
 
     /*
     |--------------------------------------------------------------------------
@@ -16,7 +16,7 @@ return [
     | recommended for protecting against DOS attacks.  If using load
     | balanced hosts, then separate each with a comma.
     */
-    'cas_real_hosts'      => env('CAS_REAL_HOSTS', 'cas.myuniv.edu'),
+    'cas_real_hosts' => env('CAS_REAL_HOSTS', 'cas.myuniv.edu'),
 
 
     /*
@@ -24,7 +24,7 @@ return [
     | Customize CAS Session Cookie Name
     |--------------------------------------------------------------------------
     */
-    'cas_session_name'    => env('CAS_SESSION_NAME', 'CASAuth'),
+    'cas_session_name' => env('CAS_SESSION_NAME', 'CASAuth'),
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ return [
     | Enable using this as a cas proxy
     |--------------------------------------------------------------------------
     */
-    'cas_proxy'           => env('CAS_PROXY', false),
+    'cas_proxy' => env('CAS_PROXY', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return [
     |--------------------------------------------------------------------------
     | Usually 443
     */
-    'cas_port'            => env('CAS_PORT', 443),
+    'cas_port' => env('CAS_PORT', 443),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ return [
     |--------------------------------------------------------------------------
     | Sometimes is /cas
     */
-    'cas_uri'             => env('CAS_URI', '/cas'),
+    'cas_uri' => env('CAS_URI', '/cas'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     |
     | VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL
     */
-    'cas_validation'          => env('CAS_VALIDATION', ''),
+    'cas_validation' => env('CAS_VALIDATION', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     | Path to the CA certificate file.  For production use set
     | the CA certificate that is the issuer of the cert
     */
-    'cas_cert'                => env('CAS_CERT', ''),
+    'cas_cert' => env('CAS_CERT', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ return [
     | intermediaries, here is where you can.  Recommended to leave
     | this set with default (true).
     */
-    'cas_validate_cn'     => env('CAS_VALIDATE_CN', true),
+    'cas_validate_cn' => env('CAS_VALIDATE_CN', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -95,14 +95,14 @@ return [
     |--------------------------------------------------------------------------
     | Empty is fine
     */
-    'cas_login_url'       => env('CAS_LOGIN_URL', ''),
+    'cas_login_url' => env('CAS_LOGIN_URL', ''),
 
     /*
     |--------------------------------------------------------------------------
     | CAS Logout URI
     |--------------------------------------------------------------------------
     */
-    'cas_logout_url'      => env('CAS_LOGOUT_URL', 'https://cas.myuniv.edu/cas/logout'),
+    'cas_logout_url' => env('CAS_LOGOUT_URL', 'https://cas.myuniv.edu/cas/logout'),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     | page in which the call was initiated.  You can override this method
     | and force the user to be redirected to a specific URL here.
     */
-    'cas_redirect_path'   => env('CAS_REDIRECT_PATH', ''),
+    'cas_redirect_path' => env('CAS_REDIRECT_PATH', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -130,7 +130,7 @@ return [
     | this feature, you may be able to retrieve user meta data.
     |--------------------------------------------------------------------------
     */
-    'cas_enable_saml'     => env('CAS_ENABLE_SAML', true),
+    'cas_enable_saml' => env('CAS_ENABLE_SAML', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -139,7 +139,7 @@ return [
     | will override this configuration.
     |--------------------------------------------------------------------------
     */
-    'cas_version'         => env('CAS_VERSION', "2.0"),
+    'cas_version' => env('CAS_VERSION', "2.0"),
     
     /*
     |--------------------------------------------------------------------------
@@ -150,7 +150,7 @@ return [
     | 3) false
     |--------------------------------------------------------------------------
     */
-    'cas_debug'           => env('CAS_DEBUG', false),
+    'cas_debug' => env('CAS_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -158,7 +158,7 @@ return [
     | true | false
     |--------------------------------------------------------------------------
     */
-    'cas_verbose_errors'  => env('CAS_VERBOSE_ERRORS', false),
+    'cas_verbose_errors' => env('CAS_VERBOSE_ERRORS', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -166,5 +166,5 @@ return [
     | This should only be used for developmental purposes.  getAttributes()
     | will return null in this condition.
      */
-    'cas_masquerade'      => env('CAS_MASQUERADE', '')
+    'cas_masquerade' => env('CAS_MASQUERADE', '')
 ];
