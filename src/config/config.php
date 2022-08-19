@@ -140,7 +140,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'cas_version' => env('CAS_VERSION', "2.0"),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Enable PHPCas Debug Mode
@@ -166,5 +166,17 @@ return [
     | This should only be used for developmental purposes.  getAttributes()
     | will return null in this condition.
      */
-    'cas_masquerade' => env('CAS_MASQUERADE', '')
+    'cas_masquerade' => env('CAS_MASQUERADE', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | The value to set in the Domain field on cookies.
+     */
+    'cas_session_domain' => env('APP_DOMAIN', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Whether to add the Secure flag to cookies.
+     */
+    'cas_session_secure' => env('HTTPS_ONLY_COOKIES', false),
 ];

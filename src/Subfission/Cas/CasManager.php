@@ -42,8 +42,8 @@ class CasManager
 			session_set_cookie_params(
 				$this->config['cas_session_lifetime'],
 				$this->config['cas_session_path'],
-				env('APP_DOMAIN'),
-				env('HTTPS_ONLY_COOKIES'),
+				$this->config['cas_session_domain'],
+				$this->config['cas_session_secure'],
 				$this->config['cas_session_httponly']
 			);
 		}
@@ -162,7 +162,9 @@ class CasManager
 			'cas_version'          => "2.0",
 			'cas_debug'            => false,
 			'cas_verbose_errors'   => false,
-			'cas_masquerade'       => ''
+			'cas_masquerade'       => '',
+			'cas_session_domain'   => '',
+			'cas_session_secure'   => false,
 		];
 
 		$this->config = array_merge($defaults, $config);
