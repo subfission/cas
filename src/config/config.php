@@ -61,6 +61,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Client service: host, port, protocol.
+    |--------------------------------------------------------------------------
+    | Example: 'http://localhost', 'https://example.com:8888'
+    */
+    'cas_client_service' => env('CAS_CLIENT_SERVICE', 'http://localhost'),
+
+
+    /*
+    |--------------------------------------------------------------------------
     | CAS Validation
     |--------------------------------------------------------------------------
     | CAS server SSL validation: 'self' for self-signed certificate, 'ca' for
