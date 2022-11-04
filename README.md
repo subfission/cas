@@ -10,6 +10,7 @@ Check out the [wiki](https://github.com/subfission/cas/wiki) for further details
 
 
 ## Updates
+* Dropped support for phpCAS <1.6.0 (dependency vulnerability)
 * Support added for Laravel 9.x
 * Support added for Laravel 8.x
 * Support added for Laravel 7.x
