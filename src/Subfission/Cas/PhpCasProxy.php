@@ -7,6 +7,30 @@ use Psr\Log\LoggerInterface;
 
 class PhpCasProxy
 {
+    public function serverTypeSaml(): string
+    {
+        // This constant is defined by the phpCAS class and is not a public class constant
+        return SAML_VERSION_1_1;
+    }
+
+    public function serverTypeCas(string $version): string
+    {
+        // This allows the user to use 1.0, 2.0, etc as a string in the config
+        $cas_version_str = 'CAS_VERSION_' . str_replace('.', '_', $version);
+
+        // We pull the phpCAS constant values as this is their definition
+        // PHP will generate a E_WARNING if the version string is invalid which is helpful for troubleshooting
+        $server_type = constant($cas_version_str);
+
+        if (is_null($server_type)) {
+            // This will never be null, but can be invalid values for which we need to detect and substitute.
+            $this->log('Invalid CAS version set; Reverting to defaults');
+            $server_type = CAS_VERSION_2_0;
+        }
+
+        return $server_type;
+    }
+
     public function setVerbose(bool $verbose): void
     {
         phpCAS::setVerbose($verbose);
