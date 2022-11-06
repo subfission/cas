@@ -25,7 +25,7 @@ class CasManagerTest extends TestCase
     {
         $this->casProxy->expects($this->never())->method('setLogger');
 
-        new CasManager([], $this->casProxy);
+        new CasManager([], null, $this->casProxy);
     }
 
     public function testEnablesCasDebugWhenSet(): void
@@ -35,6 +35,6 @@ class CasManagerTest extends TestCase
 
         $this->casProxy->expects($this->once())->method('setLogger');
 
-        new CasManager(['cas_debug' => true], $this->casProxy);
+        new CasManager(['cas_debug' => true], null, $this->casProxy);
     }
 }

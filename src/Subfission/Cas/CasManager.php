@@ -3,6 +3,7 @@
 namespace Subfission\Cas;
 
 use phpCAS;
+use Psr\Log\LoggerInterface;
 
 class CasManager
 {
@@ -39,14 +40,17 @@ class CasManager
      * @param PhpCasProxy|null $casProxy
      * @param PhpSessionProxy|null $sessionProxy
      */
-	public function __construct(array $config, PhpCasProxy $casProxy = null, PhpSessionProxy $sessionProxy = null)
+	public function __construct(array $config, LoggerInterface $logger = null, PhpCasProxy $casProxy = null, PhpSessionProxy $sessionProxy = null)
 	{
+        $this->logger = $logger;
         $this->casProxy = $casProxy ?? new PhpCasProxy();
         $this->sessionProxy = $sessionProxy ?? new PhpSessionProxy();
 
 		$this->parseConfig($config);
 
-        $this->casProxy->setLogger(\Log::getLogger());
+        if ($this->logger !== null) {
+            $this->casProxy->setLogger($this->logger);
+        }
 
 		$this->casProxy->setVerbose($this->config['cas_verbose_errors']);
 
