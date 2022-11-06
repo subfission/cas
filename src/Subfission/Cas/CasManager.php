@@ -45,9 +45,8 @@ class CasManager
         $this->sessionProxy = $sessionProxy ?? new PhpSessionProxy();
 
 		$this->parseConfig($config);
-		if ($this->config['cas_debug'] === true) {
-			$this->enableDebugCas();
-		}
+
+        $this->casProxy->setLogger(\Log::getLogger());
 
 		$this->casProxy->setVerbose($this->config['cas_verbose_errors']);
 
