@@ -12,6 +12,18 @@ class CasManager
 	 */
 	protected $config;
 
+    /**
+     * Proxy object for the phpCAS global
+     * @var PhpCasProxy
+     */
+    protected $casProxy;
+
+    /**
+     * Proxy object for the PHP built-in functions we use
+     * @var PhpSessionProxy
+     */
+    protected $sessionProxy;
+
 	/**
 	 * Attributes used for overriding or masquerading.
 	 */
@@ -22,24 +34,29 @@ class CasManager
 	 */
 	protected $_masquerading = false;
 
-	/**
-	 * @param array $config
-	 */
-	public function __construct(array $config)
+    /**
+     * @param array $config
+     * @param PhpCasProxy|null $casProxy
+     * @param PhpSessionProxy|null $sessionProxy
+     */
+	public function __construct(array $config, PhpCasProxy $casProxy = null, PhpSessionProxy $sessionProxy = null)
 	{
+        $this->casProxy = $casProxy ?? new PhpCasProxy();
+        $this->sessionProxy = $sessionProxy ?? new PhpSessionProxy();
+
 		$this->parseConfig($config);
 		if ($this->config['cas_debug'] === true) {
 			$this->enableDebugCas();
 		}
 
-		phpCAS::setVerbose($this->config['cas_verbose_errors']);
+		$this->casProxy->setVerbose($this->config['cas_verbose_errors']);
 
 		// Fix for PHP 7.2.  See http://php.net/manual/en/function.session-name.php
-		if (!headers_sent() && session_id() == "") {
-			session_name($this->config['cas_session_name']);
+		if (!$this->sessionProxy->headersSent() && $this->sessionProxy->sessionId() === "") {
+			$this->sessionProxy->sessionName($this->config['cas_session_name']);
 
 			// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
-			session_set_cookie_params(
+			$this->sessionProxy->sessionSetCookieParams(
 				$this->config['cas_session_lifetime'],
 				$this->config['cas_session_path'],
 				$this->config['cas_session_domain'],
@@ -53,18 +70,18 @@ class CasManager
 		$this->configureCasValidation();
 
 		// set login and logout URLs of the CAS server
-		phpCAS::setServerLoginURL($this->config['cas_login_url']);
+		$this->casProxy->setServerLoginURL($this->config['cas_login_url']);
 
 		// If specified, this will override the URL the user will be returning to.
 		if ($this->config['cas_redirect_path']) {
-			phpCAS::setFixedServiceURL($this->config['cas_redirect_path']);
+			$this->casProxy->setFixedServiceURL($this->config['cas_redirect_path']);
 		}
 
-		phpCAS::setServerLogoutURL($this->config['cas_logout_url']);
+		$this->casProxy->setServerLogoutURL($this->config['cas_logout_url']);
 
 		if ($this->config['cas_masquerade']) {
 			$this->_masquerading = true;
-			phpCAS::log('Masquerading as user: '
+			$this->casProxy->log('Masquerading as user: '
 				. $this->config['cas_masquerade']);
 		}
 	}
@@ -77,12 +94,12 @@ class CasManager
 	protected function enableDebugCas()
 	{
 		try {
-			phpCAS::setDebug();
+			$this->casProxy->setDebug();
 		} catch (\Exception $e) {
 			// Fix for depreciation of setDebug
-			phpCAS::setLogger();
+			$this->casProxy->setLogger();
 		}
-		phpCAS::log('Loaded configuration:' . PHP_EOL
+		$this->casProxy->log('Loaded configuration:' . PHP_EOL
 			. serialize($this->config));
 	}
 	/**
@@ -93,7 +110,7 @@ class CasManager
 	protected function configureCas($method = 'client')
 	{
 		if ($this->config['cas_enable_saml']) {
-			$server_type = SAML_VERSION_1_1;
+			$server_type = 'SAML_VERSION_1_1';
 		} else {
 			// This allows the user to use 1.0, 2.0, etc as a string in the config
 			$cas_version_str = 'CAS_VERSION_' . str_replace(
@@ -108,12 +125,12 @@ class CasManager
 
 			if (is_null($server_type)) {
 				// This will never be null, but can be invalid values for which we need to detect and substitute.
-				phpCAS::log('Invalid CAS version set; Reverting to defaults');
+				$this->casProxy->log('Invalid CAS version set; Reverting to defaults');
 				$server_type = CAS_VERSION_2_0;
 			}
 		}
 
-		phpCAS::$method(
+		$this->casProxy->$method(
 			$server_type,
 			$this->config['cas_hostname'],
 			(int) $this->config['cas_port'],
@@ -127,7 +144,7 @@ class CasManager
 			// Failure to restrict SAML logout requests to authorized hosts could
 			// allow denial of service attacks where at the least the server is
 			// tied up parsing bogus XML messages.
-			phpCAS::handleLogoutRequests(
+			$this->casProxy->handleLogoutRequests(
 				true,
 				explode(',', $this->config['cas_real_hosts'])
 			);
@@ -166,6 +183,8 @@ class CasManager
 			'cas_masquerade'       => '',
 			'cas_session_domain'   => '',
 			'cas_session_secure'   => false,
+            'cas_client_service'   => [],
+            'cas_real_hosts'       => '',
 		];
 
 		$this->config = array_merge($defaults, $config);
@@ -183,13 +202,13 @@ class CasManager
 			$this->config['cas_validation'] == 'ca'
 			|| $this->config['cas_validation'] == 'self'
 		) {
-			phpCAS::setCasServerCACert(
+			$this->casProxy->setCasServerCACert(
 				$this->config['cas_cert'],
 				$this->config['cas_validate_cn']
 			);
 		} else {
 			// Not safe (does not validate your CAS server)
-			phpCAS::setNoCasServerValidation();
+			$this->casProxy->setNoCasServerValidation();
 		}
 	}
 
@@ -204,7 +223,7 @@ class CasManager
 			return true;
 		}
 
-		return phpCAS::forceAuthentication();
+		return $this->casProxy->forceAuthentication();
 	}
 
 	/**
@@ -229,7 +248,7 @@ class CasManager
 			return $this->config['cas_masquerade'];
 		}
 
-		return phpCAS::getUser();
+		return $this->casProxy->getUser();
 	}
 
 	public function getCurrentUser()
@@ -249,7 +268,7 @@ class CasManager
 	public function getAttribute($key)
 	{
 		if (!$this->isMasquerading()) {
-			return phpCAS::getAttribute($key);
+			return $this->casProxy->getAttribute($key);
 		}
 		if ($this->hasAttribute($key)) {
 			return $this->_attributes[$key];
@@ -271,7 +290,7 @@ class CasManager
 			return array_key_exists($key, $this->_attributes);
 		}
 
-		return phpCAS::hasAttribute($key);
+		return $this->casProxy->hasAttribute($key);
 	}
 
 	/**
@@ -282,10 +301,10 @@ class CasManager
 	 */
 	public function logout($url = '', $service = '')
 	{
-		if (phpCAS::isSessionAuthenticated()) {
+		if ($this->casProxy->isSessionAuthenticated()) {
 			if (isset($_SESSION['phpCAS'])) {
 				$serialized = serialize($_SESSION['phpCAS']);
-				phpCAS::log('Logout requested, but no session data found for user:'
+				$this->casProxy->log('Logout requested, but no session data found for user:'
 					. PHP_EOL . $serialized);
 			}
 		}
@@ -298,7 +317,7 @@ class CasManager
 		if ($url) {
 			$params['url'] = $url;
 		}
-		phpCAS::logout($params);
+		$this->casProxy->logout($params);
 		exit;
 	}
 
@@ -323,7 +342,7 @@ class CasManager
 	{
 		// We don't error check because phpCAS has its own error handling.
 		return $this->isMasquerading() ? $this->_attributes
-			: phpCAS::getAttributes();
+			: $this->casProxy->getAttributes();
 	}
 
 	/**
@@ -333,7 +352,7 @@ class CasManager
 	 */
 	public function isAuthenticated()
 	{
-		return $this->isMasquerading() ? true : phpCAS::isAuthenticated();
+		return $this->isMasquerading() ? true : $this->casProxy->isAuthenticated();
 	}
 
 	/**
@@ -343,7 +362,7 @@ class CasManager
 	 */
 	public function checkAuthentication()
 	{
-		return $this->isMasquerading() ? true : phpCAS::checkAuthentication();
+		return $this->isMasquerading() ? true : $this->casProxy->checkAuthentication();
 	}
 
 	/**
@@ -365,12 +384,12 @@ class CasManager
 	public function setAttributes(array $attr)
 	{
 		$this->_attributes = $attr;
-		phpCAS::log('Forced setting of user masquerading attributes: '
+		$this->casProxy->log('Forced setting of user masquerading attributes: '
 			. serialize($attr));
 	}
 
 	/**
-	 * Pass through undefined methods to phpCAS
+	 * Pass through undefined methods to PhpCasProxy
 	 *
 	 * @param $method
 	 * @param $params
@@ -379,19 +398,6 @@ class CasManager
 	 */
 	public function __call($method, $params)
 	{
-		if (
-			method_exists('phpCAS', $method)
-			&& is_callable([
-				'phpCAS',
-				$method
-			])
-		) {
-			return call_user_func_array(['phpCAS', $method], $params);
-		}
-		throw new \BadMethodCallException('Method not callable in phpCAS '
-			. $method . '::' . print_r(
-				$params,
-				true
-			));
+        return call_user_func_array([$this->casProxy, $method], $params);
 	}
 }
