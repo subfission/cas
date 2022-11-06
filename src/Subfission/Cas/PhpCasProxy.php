@@ -44,19 +44,19 @@ class PhpCasProxy
     }
 
     public function client(string $server_version, string $server_hostname,
-                          int $server_port, string $server_uri, $service_base_url,
+                          int $server_port, string $server_uri,
                           bool $changeSessionID = true, \SessionHandlerInterface $sessionHandler = null
     ): void
     {
-        phpCAS::client($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
+        phpCAS::client($server_version, $server_hostname, $server_port, $server_uri, $changeSessionID, $sessionHandler);
     }
 
     public function proxy(string $server_version, string $server_hostname,
-                          int $server_port, string $server_uri, $service_base_url,
+                          int $server_port, string $server_uri,
                           bool $changeSessionID = true, \SessionHandlerInterface $sessionHandler = null
     ): void
     {
-        phpCAS::proxy($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
+        phpCAS::proxy($server_version, $server_hostname, $server_port, $server_uri, $changeSessionID, $sessionHandler);
     }
 
     public function handleLogoutRequests(bool $check_client = true, array $allowed_clients = []): void
