@@ -9,12 +9,12 @@ class PhpSessionProxy
         return headers_sent();
     }
 
-    public function sessionId(?string $id = null)
+    public function sessionGetId()
     {
-        return session_id($id);
+        return session_id();
     }
 
-    public function sessionName(?string $name = null)
+    public function sessionSetName(string $name = null)
     {
         return session_name($name);
     }

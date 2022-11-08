@@ -55,8 +55,8 @@ class CasManager
 		$this->casProxy->setVerbose($this->config['cas_verbose_errors']);
 
 		// Fix for PHP 7.2.  See http://php.net/manual/en/function.session-name.php
-		if (!$this->sessionProxy->headersSent() && $this->sessionProxy->sessionId() === "") {
-			$this->sessionProxy->sessionName($this->config['cas_session_name']);
+		if (!$this->sessionProxy->headersSent() && $this->sessionProxy->sessionGetId() === "") {
+			$this->sessionProxy->sessionSetName($this->config['cas_session_name']);
 
 			// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
 			$this->sessionProxy->sessionSetCookieParams(
@@ -152,6 +152,8 @@ class CasManager
 			'cas_session_name'     => 'CASAuth',
 			'cas_session_lifetime' => 7200,
 			'cas_session_path'     => '/',
+            'cas_app_domain'       => null,
+            'cas_https_cookies'    => true,
 			'cas_control_session'  => false,
 			'cas_session_httponly' => true,
 			'cas_port'             => 443,
