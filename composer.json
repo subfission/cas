@@ -50,5 +50,8 @@
         "Cas": "Subfission\\Cas\\Facades\\Cas"
       }
     }
+  },
+  "require-dev": {
+    "orchestra/testbench": "^6.25"
   }
 }

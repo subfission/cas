@@ -67,20 +67,28 @@ class PhpCasProxy
         phpCAS::setLogger($logger);
     }
 
-    public function client(string $server_version, string $server_hostname,
-                          int $server_port, string $server_uri,
-                          bool $changeSessionID = true, \SessionHandlerInterface $sessionHandler = null
-    ): void
-    {
-        phpCAS::client($server_version, $server_hostname, $server_port, $server_uri, $changeSessionID, $sessionHandler);
+    public function client(
+        string $server_version,
+        string $server_hostname,
+        int $server_port,
+        string $server_uri,
+        string $service_base_url,
+        bool $changeSessionID = true,
+        \SessionHandlerInterface $sessionHandler = null
+    ): void {
+        phpCAS::client($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
     }
 
-    public function proxy(string $server_version, string $server_hostname,
-                          int $server_port, string $server_uri,
-                          bool $changeSessionID = true, \SessionHandlerInterface $sessionHandler = null
-    ): void
-    {
-        phpCAS::proxy($server_version, $server_hostname, $server_port, $server_uri, $changeSessionID, $sessionHandler);
+    public function proxy(
+        string $server_version,
+        string $server_hostname,
+        int $server_port,
+        string $server_uri,
+        string $service_base_url,
+        bool $changeSessionID = true,
+        \SessionHandlerInterface $sessionHandler = null
+    ): void {
+        phpCAS::proxy($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
     }
 
     public function handleLogoutRequests(bool $check_client = true, array $allowed_clients = []): void
@@ -106,6 +114,11 @@ class PhpCasProxy
     public function getUser(): string
     {
         return phpCAS::getUser();
+    }
+
+    public function getAttributes(): array
+    {
+        return phpCAS::getAttributes();
     }
 
     public function getAttribute(string $key)

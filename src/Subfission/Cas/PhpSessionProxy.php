@@ -25,8 +25,7 @@ class PhpSessionProxy
         ?string $domain = null,
         ?bool $secure = null,
         ?bool $httponly = null
-    ): bool
-    {
+    ): bool {
         return session_set_cookie_params($lifetime_or_options, $path, $domain, $secure, $httponly);
     }
 }

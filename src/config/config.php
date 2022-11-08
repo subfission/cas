@@ -28,20 +28,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Customize CAS Session Cookie Domain
-    |--------------------------------------------------------------------------
-    */
-    'cas_app_domain' => env('APP_DOMAIN'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Enable HTTPS only cookie
-    |--------------------------------------------------------------------------
-    */
-    'cas_https_cookies' => env('HTTPS_ONLY_COOKIES'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Laravel has it's own authentication sessions. Unless you want phpCAS
     | to manage the session, leave this set to false.  Note that the
     | middleware and redirect classes will be handling removal
