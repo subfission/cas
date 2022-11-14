@@ -118,7 +118,7 @@ class CasManager
 			$this->config['cas_hostname'],
 			(int) $this->config['cas_port'],
 			$this->config['cas_uri'],
-			$this->config['cas_client_service'],
+			//$this->config['cas_client_service'],
 			$this->config['cas_control_session']
 		);
 
