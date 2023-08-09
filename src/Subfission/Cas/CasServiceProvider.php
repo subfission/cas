@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class CasServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -34,7 +33,7 @@ class CasServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cas', function () {
-            return new CasManager(config('cas'));
+            return new CasManager(config('cas'), \Log::getLogger());
         });
     }
 
@@ -45,6 +44,6 @@ class CasServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('cas');
+        return ['cas'];
     }
 }
