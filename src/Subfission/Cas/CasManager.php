@@ -48,7 +48,9 @@ class CasManager
 			);
 		}
 
-		$this->configureCas($this->config['cas_proxy'] ? 'proxy' : 'client');
+		// Only one client/proxy is allowed by phpCAS. 
+		// If phpCAS client was initialized already, do nothing.
+		phpCAS::getCasClient() ?? $this->configureCas($this->config['cas_proxy'] ? 'proxy' : 'client');
 
 		$this->configureCasValidation();
 
