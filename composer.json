@@ -1,54 +1,54 @@
 {
-  "name": "subfission/cas",
-  "description": "Adds CAS support to Laravel 5.x - 10.x",
-  "keywords": [
-    "CAS",
-    "phpCAS",
-    "SSO",
-    "laravel",
-    "laravel 6",
-    "laravel 7",
-    "laravel 8",
-    "laravel 9"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "subfission",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "php": ">=7.2.0",
-    "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
-    "apereo/phpcas": "^1.6"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^8.0|^9.0|^10.0",
-    "pestphp/pest": "^1.21"
-  },
-  "autoload": {
-    "psr-4": {
-      "Subfission\\Cas\\": "src/Subfission/Cas/"
+    "name": "subfission/cas",
+    "description": "Adds CAS support to Laravel 5.x - 10.x",
+    "keywords": [
+        "CAS",
+        "phpCAS",
+        "SSO",
+        "laravel",
+        "laravel 6",
+        "laravel 7",
+        "laravel 8",
+        "laravel 9"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "subfission",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+        "apereo/phpcas": "^1.6"
     },
-    "files": [
-      "src/Subfission/Cas/functions.php"
-    ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Subfission\\Cas\\Tests\\": "tests"
+    "require-dev": {
+        "phpunit/phpunit": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^1.21|^2.34"
+    },
+    "autoload": {
+        "psr-4": {
+            "Subfission\\Cas\\": "src/Subfission/Cas/"
+        },
+        "files": [
+            "src/Subfission/Cas/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Subfission\\Cas\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Subfission\\Cas\\CasServiceProvider"
+            ],
+            "aliases": {
+                "Cas": "Subfission\\Cas\\Facades\\Cas"
+            }
+        }
     }
-  },
-  "minimum-stability": "stable",
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Subfission\\Cas\\CasServiceProvider"
-      ],
-      "aliases": {
-        "Cas": "Subfission\\Cas\\Facades\\Cas"
-      }
-    }
-  }
 }
