@@ -1,6 +1,6 @@
 {
   "name": "subfission/cas",
-  "description": "Adds CAS support to Laravel 5.x - 10.x",
+  "description": "Adds CAS support to Laravel 5.x - 11.x",
   "keywords": [
     "CAS",
     "phpCAS",
@@ -9,7 +9,9 @@
     "laravel 6",
     "laravel 7",
     "laravel 8",
-    "laravel 9"
+    "laravel 9",
+    "laravel 10",
+    "laravel 11"
   ],
   "license": "MIT",
   "authors": [
