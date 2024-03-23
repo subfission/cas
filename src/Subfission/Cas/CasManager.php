@@ -14,7 +14,7 @@ class CasManager
     /**
      * @var LoggerInterface|null
      */
-    private $logger;
+    private $logger = null;
 
     /**
      * Proxy object for the phpCAS global
@@ -50,21 +50,15 @@ class CasManager
      */
     public function __construct(
         array           $config,
-        LoggerInterface $logger = null,
         PhpCasProxy     $casProxy = null,
         PhpSessionProxy $sessionProxy = null,
         LogoutStrategy  $logoutStrategy = null
     ) {
-        $this->logger = $logger;
         $this->casProxy = $casProxy ?? new PhpCasProxy();
         $this->sessionProxy = $sessionProxy ?? new PhpSessionProxy();
         $this->logoutStrategy = $logoutStrategy ?? new LogoutStrategy();
 
         $this->parseConfig($config);
-
-        if ($this->logger !== null) {
-            $this->casProxy->setLogger($this->logger);
-        }
 
         $this->casProxy->setVerbose($this->config['cas_verbose_errors']);
 
@@ -104,21 +98,17 @@ class CasManager
     }
 
     /**
-     * Enable debug mode for CAS
+     * Sets a PSR-3 compatible logger, or null to disable logging
      *
-     * @param $enabled
+     * @param LoggerInterface|null $logger
+     * @return void
      */
-    protected function enableDebugCas()
+    public function setLogger(?LoggerInterface $logger = null): void
     {
-        try {
-            $this->casProxy->setDebug();
-        } catch (\Exception $e) {
-            // Fix for depreciation of setDebug
-            $this->casProxy->setLogger();
-        }
-        $this->casProxy->log('Loaded configuration:' . PHP_EOL
-            . serialize($this->config));
+        $this->logger = $logger;
+        $this->casProxy->setLogger($this->logger);
     }
+
     /**
      * Configure CAS Client|Proxy
      *
@@ -179,7 +169,6 @@ class CasManager
             'cas_redirect_path'    => '',
             'cas_enable_saml'      => true,
             'cas_version'          => "2.0",
-            'cas_debug'            => false,
             'cas_verbose_errors'   => false,
             'cas_masquerade'       => '',
             'cas_session_domain'   => '',
