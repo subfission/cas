@@ -48,16 +48,6 @@ class CasManagerTest extends TestCase
         $this->makeCasManager();
     }
 
-    public function testSetsLoggerWhenLoggerIsProvided(): void
-    {
-        $logger = $this->createMock(LoggerInterface::class);
-
-        $this->casProxy->expects($this->once())->method('setLogger')
-            ->with($this->equalTo($logger));
-
-        $this->makeCasManager([], $logger);
-    }
-
     /**
      * @dataProvider setVerboseChecks
      */
@@ -576,8 +566,8 @@ class CasManagerTest extends TestCase
         $this->assertTrue($manager->checkAuthentication());
     }
 
-    private function makeCasManager(array $config = [], LoggerInterface $logger = null): CasManager
+    private function makeCasManager(array $config = []): CasManager
     {
-        return new CasManager($config, $logger, $this->casProxy, $this->sessionProxy, $this->logoutStrategy);
+        return new CasManager($config, $this->casProxy, $this->sessionProxy, $this->logoutStrategy);
     }
 }
