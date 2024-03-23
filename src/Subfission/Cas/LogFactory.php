@@ -12,16 +12,20 @@ class LogFactory
     {
         $logType = config('cas.cas_log');
 
-        if ($logType === 'laravel') {
+        // Use the active Laravel logger given by the facade
+        if (strtolower($logType) === 'laravel') {
             return \Log::getLogger();
         }
 
+        // Assume the value is a path for a log file
+        // We are not responsible for file system errors at this point
         if (!empty($logType)) {
             $log = new Logger('phpCAS');
             $log->pushHandler(new StreamHandler($logType));
             return $log;
         }
 
+        // Disable logging
         return null;
     }
 }
