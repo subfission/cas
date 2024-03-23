@@ -152,14 +152,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Enable PHPCas Debug Mode
-    | Options are:
-    | 1) true (defaults logfile creation to /tmp/phpCAS.log)
-    | 2) 'path/to/logfile'
-    | 3) false
+    | Sets the log method for phpCAS. phpCAS logs are verbose, multi-line, INFO
+    | log entries. Consider the implications when choosing a log approach.
+    |
+    | null (default) = no logging
+    | laravel = use the Laravel MonoLog instance
+    | /path/to/file = create a new log at the given file path
     |--------------------------------------------------------------------------
     */
-    'cas_debug' => env('CAS_DEBUG', false),
+    'cas_log' => env('CAS_LOG'),
 
     /*
     |--------------------------------------------------------------------------

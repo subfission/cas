@@ -33,7 +33,14 @@ class CasServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cas', function () {
-            return new CasManager(config('cas'), \Log::getLogger());
+            $cas = new CasManager(config('cas'));
+
+            /** @var LogFactory $logger */
+            $logger = resolve(LogFactory::class);
+
+            $cas->setLogger($logger->make());
+
+            return $cas;
         });
     }
 
