@@ -32,6 +32,10 @@ class CasServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/config.php', 'cas'
+        );
+
         $this->app->singleton('cas', function () {
             $cas = new CasManager(config('cas'));
 
