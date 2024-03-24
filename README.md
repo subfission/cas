@@ -8,9 +8,17 @@ This package offers and abstraction of [Apereo CAS](https://www.apereo.org/proje
 
 Check out the [wiki](https://github.com/subfission/cas/wiki) for further details.
 
+## ChangeLog
 
-## Updates
+### Release 5.0.0
+
 * Support added for Laravel 11.x
+* Added phpCAS log control
+* Refactor internal design to support tests
+* Add GitHub actions to run tests and linting
+
+### Release 4 and earlier
+
 * Support added for Laravel 10.x
 * Dropped support for phpCAS <1.6.0 (dependency vulnerability)
 * Support added for Laravel 9.x
