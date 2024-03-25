@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Guard;
 
 class CASAuth
 {
-
     protected $auth;
     protected $cas;
 

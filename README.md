@@ -1,15 +1,24 @@
 # CAS
-Simple CAS Authentication for Laravel 6-10.x.
+Simple CAS Authentication for Laravel 6-11.x.
 
-This version of CAS, or Central Authentication Service, is designed to integrate with Laravel 6-10 projects that need to implement SSO.  
+This version of CAS, or Central Authentication Service, is designed to integrate with Laravel 6-11 projects that need to implement SSO.  
 Older version of Laravel may work, but are untested. This package was built for my necessity but can be easily used for anyone requiring CAS/SAML SSO in Laravel 6+.  This package is different in mindset as the goal in this project is to be as minimal as possible while offering as much flexibility as needed.
 
 This package offers and abstraction of [Apereo CAS](https://www.apereo.org/projects/cas) (phpCAS), a cross platform and open-source *CAS client* and *server* provider.  Be sure to check them out if you intend to implement an SSO service other than AD.
 
 Check out the [wiki](https://github.com/subfission/cas/wiki) for further details.
 
+## ChangeLog
 
-## Updates
+### Release 5.0.0
+
+* Support added for Laravel 11.x
+* Added phpCAS log control
+* Refactor internal design to support tests
+* Add GitHub actions to run tests and linting
+
+### Release 4 and earlier
+
 * Support added for Laravel 10.x
 * Dropped support for phpCAS <1.6.0 (dependency vulnerability)
 * Support added for Laravel 9.x

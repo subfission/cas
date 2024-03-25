@@ -1,0 +1,42 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [7.4, 8.2]
+
+    name: PHP${{ matrix.php }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, phive
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-php${{ matrix.php }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+            ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-suggest
+          phive --no-progress install --trust-gpg-keys 4AA394086372C20A,CF1A108D0E7AE720,E82B2FB314E9906E
+      - name: Execute checks
+        run: |
+          tools/php-cs-fixer fix -v --dry-run --stop-on-violation --using-cache=no
