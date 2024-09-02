@@ -570,4 +570,31 @@ class CasManagerTest extends TestCase
     {
         return new CasManager($config, $this->casProxy, $this->sessionProxy, $this->logoutStrategy);
     }
+
+    public function testConfiguresCasWithServiceBaseArray(): void
+    {
+        $config = [
+            'cas_enable_saml' => false,
+            'cas_hostname' => $this->faker->domainName(),
+            'cas_port' => $this->faker->numberBetween(1, 1024),
+            'cas_uri' => $this->faker->url(),
+            'cas_client_service' => [$this->faker->url(), $this->faker->url()],
+            'cas_control_session' => $this->faker->boolean(),
+        ];
+
+        $this->casProxy->expects($this->once())->method('serverTypeCas')
+            ->willReturnArgument(0);
+
+        $this->casProxy->expects($this->once())->method('client')
+            ->with(
+                $this->anything(),
+                $this->equalTo($config['cas_hostname']),
+                $this->equalTo($config['cas_port']),
+                $this->equalTo($config['cas_uri']),
+                $this->equalTo($config['cas_client_service']),
+                $this->equalTo($config['cas_control_session'])
+            );
+
+        $this->makeCasManager($config);
+    }
 }

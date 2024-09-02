@@ -2,6 +2,7 @@
 
 namespace Subfission\Cas;
 
+use CAS_ServiceBaseUrl_Interface;
 use phpCAS;
 use Psr\Log\LoggerInterface;
 
@@ -67,26 +68,76 @@ class PhpCasProxy
         phpCAS::setLogger($logger);
     }
 
+    /**
+     * phpCAS client initializer.
+     *
+     * @param string                   $server_version  the version of the CAS server
+     * @param string                   $server_hostname the hostname of the CAS server
+     * @param int                      $server_port     the port the CAS server is running on
+     * @param string                   $server_uri      the URI the CAS server is responding on
+     * @param string|string[]|CAS_ServiceBaseUrl_Interface
+     *                                 $service_base_url the base URL (protocol, host and the
+     *                                                  optional port) of the CAS client; pass
+     *                                                  in an array to use auto discovery with
+     *                                                  an allowlist; pass in
+     *                                                  CAS_ServiceBaseUrl_Interface for custom
+     *                                                  behavior. Added in 1.6.0. Similar to
+     *                                                  serverName config in other CAS clients.
+     * @param bool                     $changeSessionID Allow phpCAS to change the session_id
+     *                                                  (Single Sign Out/handleLogoutRequests
+     *                                                  is based on that change)
+     * @param \SessionHandlerInterface $sessionHandler  the session handler
+     *
+     * @return void a newly created CAS_Client object
+     * @note Only one of the phpCAS::client() and phpCAS::proxy functions should be
+     * called, only once, and before all other methods (except phpCAS::getVersion()
+     * and phpCAS::setDebug()).
+     */
     public function client(
-        string $server_version,
-        string $server_hostname,
-        int $server_port,
-        string $server_uri,
-        string $service_base_url,
-        bool $changeSessionID = true,
-        \SessionHandlerInterface $sessionHandler = null
+        $server_version,
+        $server_hostname,
+        $server_port,
+        $server_uri,
+        $service_base_url,
+        $changeSessionID = true,
+        $sessionHandler = null
     ): void {
         phpCAS::client($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
     }
 
+    /**
+     * phpCAS proxy initializer.
+     *
+     * @param string                   $server_version  the version of the CAS server
+     * @param string                   $server_hostname the hostname of the CAS server
+     * @param string                   $server_port     the port the CAS server is running on
+     * @param string                   $server_uri      the URI the CAS server is responding on
+     * @param string|string[]|CAS_ServiceBaseUrl_Interface
+     *                                 $service_base_url the base URL (protocol, host and the
+     *                                                  optional port) of the CAS client; pass
+     *                                                  in an array to use auto discovery with
+     *                                                  an allowlist; pass in
+     *                                                  CAS_ServiceBaseUrl_Interface for custom
+     *                                                  behavior. Added in 1.6.0. Similar to
+     *                                                  serverName config in other CAS clients.
+     * @param bool                     $changeSessionID Allow phpCAS to change the session_id
+     *                                                  (Single Sign Out/handleLogoutRequests
+     *                                                  is based on that change)
+     * @param \SessionHandlerInterface $sessionHandler  the session handler
+     *
+     * @return void a newly created CAS_Client object
+     * @note Only one of the phpCAS::client() and phpCAS::proxy functions should be
+     * called, only once, and before all other methods (except phpCAS::getVersion()
+     * and phpCAS::setDebug()).
+     */
     public function proxy(
-        string $server_version,
-        string $server_hostname,
-        int $server_port,
-        string $server_uri,
-        string $service_base_url,
-        bool $changeSessionID = true,
-        \SessionHandlerInterface $sessionHandler = null
+        $server_version,
+        $server_hostname,
+        $server_port,
+        $server_uri,
+        $service_base_url,
+        $changeSessionID = true,
+        $sessionHandler = null
     ): void {
         phpCAS::proxy($server_version, $server_hostname, $server_port, $server_uri, $service_base_url, $changeSessionID, $sessionHandler);
     }
