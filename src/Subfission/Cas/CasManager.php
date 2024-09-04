@@ -182,7 +182,11 @@ class CasManager
          * Only do this when it looks like we have a comma separated list. Passing in an array
          * triggers autodiscovery downstream and we want to avoid that if possible.
          */
-        if (is_string($config['cas_client_service']) && strpos($config['cas_client_service'], ',') !== false) {
+        if (
+            isset($config['cas_client_service']) &&
+            is_string($config['cas_client_service']) &&
+            strpos($config['cas_client_service'], ',') !== false
+        ) {
             $config['cas_client_service'] = explode(',', $config['cas_client_service']);
         }
 
