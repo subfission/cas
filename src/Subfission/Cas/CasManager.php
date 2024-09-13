@@ -177,6 +177,19 @@ class CasManager
             'cas_real_hosts'       => '',
         ];
 
+        /*
+         * If cas_client_service is a string, see if it contains a comma and split on it.
+         * Only do this when it looks like we have a comma separated list. Passing in an array
+         * triggers autodiscovery downstream and we want to avoid that if possible.
+         */
+        if (
+            isset($config['cas_client_service']) &&
+            is_string($config['cas_client_service']) &&
+            strpos($config['cas_client_service'], ',') !== false
+        ) {
+            $config['cas_client_service'] = explode(',', $config['cas_client_service']);
+        }
+
         $this->config = array_merge($defaults, $config);
     }
 
