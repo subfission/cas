@@ -1,3 +1,12 @@
+# Repository Archival Notice – Feb 2025
+As of June 2024, the apereo/phpCAS repository is no longer actively maintained or updated and we have seen no progress on finding new maintainers. As a result, this codebase remains in a stagnant state with end-of-life (EOL) dependencies. To mitigate security risks for new projects, this repository is now scheduled for immediate archival.
+
+We strongly recommend exploring alternative CAS solutions for future development.
+
+- IT
+
+--- 
+
 # CAS
 Simple CAS Authentication for Laravel 6-11.x.
 
